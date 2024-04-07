@@ -22,9 +22,9 @@ namespace KnightsTale.Sprites
             float changeY = 0;
 
             if (Keyboard.GetState().IsKeyDown(input.Up))
-                changeY -= 5;
+                changeY -= 40;
             if (Keyboard.GetState().IsKeyDown(input.Down))
-                changeY += 5;
+                changeY += 40;
 
             position.Y += changeY;
 
@@ -34,9 +34,9 @@ namespace KnightsTale.Sprites
 
             float changeX = 0;
             if (Keyboard.GetState().IsKeyDown(input.Left))
-                changeX -= 5;
+                changeX -= 40;
             if (Keyboard.GetState().IsKeyDown(input.Right))
-                changeX += 5;
+                changeX += 40;
 
             position.X += changeX;
 

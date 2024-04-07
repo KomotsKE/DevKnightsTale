@@ -1,4 +1,5 @@
-﻿using KnightsTale.Sprites;
+﻿using KnightsTale.Managers;
+using KnightsTale.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -23,10 +24,10 @@ namespace KnightsTale.Models
                 );
         }
 
-        public void Draw(SpriteBatch spriteBatch, List<Sprite> sprites)
+        public void Draw(SpriteBatch spriteBatch, List<Sprite> sprites, TileMapManager tilemap)
         {
             List<Sprite> sortedSprites = sprites.OrderBy(obj => obj.rectangle.Bottom).ToList();
-
+            tilemap.Draw();
             foreach (Sprite sprite in sortedSprites)
             {
                 sprite.Draw(spriteBatch, position);

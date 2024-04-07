@@ -14,7 +14,6 @@ namespace KnightsTale
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private List<Sprite> sprites;
         private SceneManager sceneManager;
 
         public Game1()
@@ -22,22 +21,18 @@ namespace KnightsTale
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            sceneManager = new SceneManager();
-            sprites = new List<Sprite>();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            sceneManager = new SceneManager();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-            sceneManager.AddScene(new GameScene(Content, sceneManager, _graphics));
+            sceneManager.AddScene(new GameScene(Content, sceneManager, _graphics, _spriteBatch));
         }
 
         protected override void Update(GameTime gameTime)
@@ -47,9 +42,6 @@ namespace KnightsTale
 
             sceneManager.GetCurrentScene().Update(gameTime);
 
-
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
@@ -57,7 +49,6 @@ namespace KnightsTale
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
             sceneManager.GetCurrentScene().Draw(_spriteBatch);
