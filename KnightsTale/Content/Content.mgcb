@@ -10,9 +10,20 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
+
+#begin dungeontileset-extended.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dungeontileset-extended.png
 
 #begin Map/floor_1.png
 /importer:TextureImporter
@@ -25,6 +36,24 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Map/floor_1.png
+
+#begin Map/map.tmx
+/copy:Map/map.tmx
+
+#begin Map/mapTileSets/atlas_floor-16x16.tsx
+/copy:Map/mapTileSets/atlas_floor-16x16.tsx
+
+#begin Map/mapTileSets/atlas_walls_low-16x16.tsx
+/copy:Map/mapTileSets/atlas_walls_low-16x16.tsx
+
+#begin Map/mapTileSets/dungeontileset-extended.tsx
+/copy:Map/mapTileSets/dungeontileset-extended.tsx
+
+#begin Map/mapTileSets/omnibo_dessert_dungeon.tsx
+/copy:Map/mapTileSets/omnibo_dessert_dungeon.tsx
+
+#begin Map/mapTileSets/omnibo_jungledungeon - copia.tsx
+/copy:Map/mapTileSets/omnibo_jungledungeon - copia.tsx
 
 #begin Map/wall_mid.png
 /importer:TextureImporter

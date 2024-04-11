@@ -5,15 +5,17 @@ namespace KnightsTale.Sprites
 {
     public class Sprite
     {
-        private readonly float scale = 5f;
+        private readonly float scale = 6f;
         public Texture2D texture;
         public Vector2 position;
+        public int width;
+        public int height;
         public Rectangle rectangle
         {
             get
             {
                 return new Rectangle((int)position.X, (int)position.Y,
-                    texture.Width * (int)scale, texture.Height * (int)scale);
+                    width, height);
             }
         }
 
@@ -22,6 +24,16 @@ namespace KnightsTale.Sprites
         {
             this.texture = texture;
             this.position = position;
+            width = texture.Width;
+            height = texture.Height;
+        }
+        
+        public Sprite(Texture2D texture, Vector2 position, int width, int height)
+        {
+            this.texture = texture;
+            this.position = position;
+            this.width = width;
+            this.height = height;
         }
 
         public virtual void Update(GameTime gameTime)
