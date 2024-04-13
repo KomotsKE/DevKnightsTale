@@ -25,8 +25,9 @@ namespace KnightsTale.Models
 
         public void Draw(SpriteBatch spriteBatch, List<Sprite> sprites)
         {
-            List<Sprite> sortedSprites = sprites.OrderBy(obj => obj.rectangle.Bottom).ToList();
-
+            //List<Sprite> sortedSprites = sprites.OrderBy(obj => obj.rectangle.Bottom).ToList();
+            List<Sprite> sortedSprites = sprites.ToList();
+            
             foreach (var sprite in sortedSprites)
             {
                 sprite.Draw(spriteBatch, position);

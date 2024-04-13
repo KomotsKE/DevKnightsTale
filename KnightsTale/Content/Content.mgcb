@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin dungeontileset-extended.png
+#begin Map/0x72_DungeonTilesetII_v1.7.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:dungeontileset-extended.png
+/build:Map/0x72_DungeonTilesetII_v1.7.png
 
-#begin Map/floor_1.png
+#begin Map/atlas_floor-16x16.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,10 +35,37 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Map/floor_1.png
+/build:Map/atlas_floor-16x16.png
+
+#begin Map/atlas_walls_low-16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Map/atlas_walls_low-16x16.png
+
+#begin Map/dungeontileset-extended.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Map/dungeontileset-extended.png
 
 #begin Map/map.tmx
 /copy:Map/map.tmx
+
+#begin Map/mapTileSets/0x72_DungeonTilesetII_v1.7.tsx
+/copy:Map/mapTileSets/0x72_DungeonTilesetII_v1.7.tsx
 
 #begin Map/mapTileSets/atlas_floor-16x16.tsx
 /copy:Map/mapTileSets/atlas_floor-16x16.tsx
@@ -55,7 +82,7 @@
 #begin Map/mapTileSets/omnibo_jungledungeon - copia.tsx
 /copy:Map/mapTileSets/omnibo_jungledungeon - copia.tsx
 
-#begin Map/wall_mid.png
+#begin Map/omnibo_dessert_dungeon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -65,7 +92,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Map/wall_mid.png
+/build:Map/omnibo_dessert_dungeon.png
+
+#begin Map/omnibo_jungledungeon - copia.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Map/omnibo_jungledungeon - copia.png
 
 #begin Player/knight_m_idle_anim_f0.png
 /importer:TextureImporter

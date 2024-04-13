@@ -28,6 +28,11 @@ namespace KnightsTale
 
         protected override void Initialize()
         {
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = 1680;
+            _graphics.PreferredBackBufferHeight = 960;
+            _graphics.ApplyChanges();
+            base.Initialize();
             // TODO: Add your initialization logic here
             base.Initialize();
         }
@@ -55,7 +60,7 @@ namespace KnightsTale
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);

@@ -1,12 +1,9 @@
 ﻿using KnightsTale.Sprites;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.MediaFoundation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TiledCS;
 
 namespace KnightsTale.Managers
@@ -15,13 +12,13 @@ namespace KnightsTale.Managers
     {
         private TiledMap map;
         private Dictionary<int, TiledTileset> tilesets;
-        private Texture2D tilesetTexture;
+        private ContentManager content;
 
-        public TileMapManager(TiledMap map, Dictionary<int, TiledTileset> tilesets, Texture2D tilesetTexture)
+        public TileMapManager(TiledMap map, Dictionary<int, TiledTileset> tilesets, ContentManager content)
         {
             this.map = map;
             this.tilesets = tilesets;
-            this.tilesetTexture = tilesetTexture;
+            this.content = content;
         }
 
         public List<Tile> GetTileList()
@@ -48,10 +45,18 @@ namespace KnightsTale.Managers
                         var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
                         var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
 
-                        list.Add(new Tile(tilesetTexture, position, map.TileWidth, map.TileHeight, source));
+                        list.Add(new Tile(content.Load<Texture2D>("map/"+tileset.Name), position, map.TileWidth, map.TileHeight, source));
                     }
                 }
             }
+            return list;
+        }
+        public List<Rectangle> GetObjectList()
+        {
+            var list = new List<Rectangle>();
+            var ObjectLayers = map.Layers.Where(layer => layer.type == TiledLayerType.ObjectLayer);
+            var Collisions = ObjectLayers.First(layer => layer.name == ("Collisions"));
+            foreach (var obj in Collisions.objects) { list.Add(new Rectangle((int)obj.x, (int)obj.y, (int)obj.width, (int)obj.height)); }
             return list;
         }
     }

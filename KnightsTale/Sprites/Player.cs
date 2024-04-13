@@ -8,9 +8,10 @@ namespace KnightsTale.Sprites
 {
     public class Player : Sprite
     {
-        public List<Sprite> CollisionGroup;
+        public List<Rectangle> CollisionGroup;
+        public Rectangle Hitbox { get { return new Rectangle(rectangle.X, rectangle.Y, 16, 16); } }
         public Input input = new Input() { Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D };
-        public Player(Texture2D texture, Vector2 position, List<Sprite> collisionGroup) : base(texture, position)
+        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup) : base(texture, position)
         {
             this.CollisionGroup = collisionGroup;
         }
@@ -28,8 +29,9 @@ namespace KnightsTale.Sprites
 
             position.Y += changeY;
 
-            foreach (var sprite in CollisionGroup)
-                if (sprite != this && sprite.rectangle.Intersects(rectangle))
+            foreach (var rectangle in CollisionGroup)
+                //if (sprite != this && sprite.rectangle.Intersects(rectangle))
+                if (rectangle.Intersects(Hitbox))
                     position.Y -= changeY;
 
             float changeX = 0;
@@ -40,8 +42,9 @@ namespace KnightsTale.Sprites
 
             position.X += changeX;
 
-            foreach (var sprite in CollisionGroup)
-                if (sprite != this && sprite.rectangle.Intersects(rectangle))
+            foreach (var rectangle in CollisionGroup)
+                //if (sprite != this && sprite.rectangle.Intersects(rectangle))
+                if (rectangle.Intersects(Hitbox))
                     position.X -= changeX;
         }
     }

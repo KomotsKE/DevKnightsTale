@@ -5,7 +5,7 @@ namespace KnightsTale.Sprites
 {
     public class Sprite
     {
-        private readonly float scale = 6f;
+        //private readonly float scale = 6f;
         public Texture2D texture;
         public Vector2 position;
         public int width;
