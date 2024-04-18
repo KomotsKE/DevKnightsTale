@@ -1,15 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace KnightsTale.Sprites
+﻿namespace KnightsTale.Sprites
 {
     public class Sprite
     {
-        //private readonly float scale = 6f;
         public Texture2D texture;
         public Vector2 position;
         public int width;
         public int height;
+        public Rectangle CollisionHitBox { get { return rectangle; } }
+        public float depth { get { return CollisionHitBox.Bottom * Globals.deepthcof; } }
         public Rectangle rectangle
         {
             get
@@ -40,20 +38,13 @@ namespace KnightsTale.Sprites
         {
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        //public virtual void Draw()
+        //{
+        //    Globals.SpriteBatch.Draw(texture, rectangle, Color.White);
+        //}
+        public virtual void Draw()
         {
-            spriteBatch.Draw(texture, rectangle, Color.White);
-        }
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 offSet)
-        {
-            spriteBatch.Draw(
-                texture,
-                new Rectangle(
-                    rectangle.X + (int)offSet.X,
-                    rectangle.Y + (int)offSet.Y,
-                    rectangle.Width,
-                    rectangle.Height),
-                Color.White);
+            Globals.SpriteBatch.Draw(texture, rectangle, rectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, depth);
         }
     }
 }

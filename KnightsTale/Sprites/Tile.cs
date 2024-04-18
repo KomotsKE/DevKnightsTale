@@ -11,24 +11,19 @@ namespace KnightsTale.Sprites
     public class Tile : Sprite
     {
         Rectangle source;
+        
         public Tile(Texture2D texture, Vector2 position, int width, int height, Rectangle source) : base(texture, position,width,height)
         {
             this.source = source;
         }
-        public override void Draw(SpriteBatch spriteBatch)
+        public Tile(Texture2D texture, Vector2 position, int width, int height, Rectangle source,int depth) : base(texture, position, width, height)
         {
-            spriteBatch.Draw(texture,rectangle,source,Color.White);
+            this.source = source;
+            //this.depth = depth;
         }
-
-        public override void Draw(SpriteBatch spriteBatch, Vector2 offSet)
+        public override void Draw()
         {
-            var rect = new Rectangle(
-                    rectangle.X + (int)offSet.X,
-                    rectangle.Y + (int)offSet.Y,
-                    rectangle.Width,
-                    rectangle.Height);
-            spriteBatch.Draw(texture,rect,source,Color.White);
-                   
+            Globals.SpriteBatch.Draw(texture, rectangle, source, Color.White, 0f, Vector2.Zero, SpriteEffects.None, depth) ;
         }
     }
 }

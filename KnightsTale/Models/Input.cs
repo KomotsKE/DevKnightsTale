@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-
-namespace KnightsTale.Models
+﻿namespace KnightsTale.Models
 {
     public class Input
     {

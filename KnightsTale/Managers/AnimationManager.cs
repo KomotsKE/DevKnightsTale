@@ -1,74 +1,61 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KnightsTale.Models;
+using System;
+using System.Windows.Forms;
 
 namespace KnightsTale.Managers
 {
-    public class AnimationManager
+    struct AnimationManager
     {
-        int numColumns;
-        int numFrames;
-        Vector2 size;
-
-        int counter;
-        int activeFrame;
-        int interval;
-
-        int rowPos;
-        int colPos;
-
-        public int OffsetX { get; set; } = 0;
-        public int OffsetY { get; set; } = 0;
-
-        public AnimationManager(int numFrames, int numColumns, Vector2 size)
+        Animation animation;
+        public Animation Animation
         {
-            this.numFrames = numFrames;
-            this.numColumns = numColumns;
-            this.size = size;
-
-            counter = 0;
-            activeFrame = 0;
-            interval = 30;
-
-            rowPos = 0;
-            colPos = 0;
+            get { return animation; }
         }
 
-        public void Update()
+        int frameIndex;
+        public int FrameIndex
         {
-            counter++;
-            if (counter > interval)
+            get { return frameIndex; }
+            set { frameIndex = value; }
+        }
+
+        private float timer;
+
+        public Vector2 Origin
+        {
+            get { return new Vector2(animation.FrameWidth / 2, animation.FrameHeight); }
+        }
+
+        public void PlayAnimation(Animation newAnimation)
+        {
+            if (animation == newAnimation)
+                return;
+
+            animation = newAnimation;
+            frameIndex = 0;
+            timer = 0;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects spriteEffects, float layerDepth)
+        {
+            if (animation == null)
+                 throw new NotSupportedException("No animation selected");
+
+            timer += Globals.TotalSeconds;
+            while (timer >= animation.FrameTime)
             {
-                counter = 0;
-                NextFrame();
-            }
-        }
+                timer -= animation.FrameTime;
 
-        private void NextFrame()
-        {
-            activeFrame++;
-            colPos++;
-            if (activeFrame >= numFrames)
-            {
-                ResetAnimation();
+                if (animation.IsLooping)
+                {
+                    frameIndex = (frameIndex + 1) % animation.FrameCount;
+                }
+                else frameIndex = Math.Min(frameIndex + 1, animation.FrameCount - 1);
             }
-            if (colPos >= numColumns)
-            {
-                colPos = 0;
-                rowPos++;
-            }
-        }
 
-        private void ResetAnimation()
-        {
-            activeFrame = 0;
-            colPos = 0;
-            rowPos = 0;
-        }
+            Rectangle rectangle = new Rectangle(frameIndex * Animation.FrameWidth,0,Animation.FrameWidth,Animation.FrameHeight);
 
-        public Rectangle GetFrame()
-        {
-            return new Rectangle(colPos * (int)size.X + OffsetX,
-                                rowPos * (int)size.Y + OffsetY,
-                                (int)size.X, (int)size.Y);
+            spriteBatch.Draw(Animation.Texture, position, rectangle, Color.White, 0f, Origin, 1f, spriteEffects, layerDepth);
         }
     }
 }

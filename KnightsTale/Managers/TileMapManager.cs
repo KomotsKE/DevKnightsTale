@@ -1,7 +1,4 @@
 ﻿using KnightsTale.Sprites;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using TiledCS;
@@ -13,6 +10,9 @@ namespace KnightsTale.Managers
         private TiledMap map;
         private Dictionary<int, TiledTileset> tilesets;
         private ContentManager content;
+        private int depth;
+        public float cons_depth_y { get { return 1f/map.Height; } }
+        public float cons_depth_x { get { return 0.00001f / map.Width; } }
 
         public TileMapManager(TiledMap map, Dictionary<int, TiledTileset> tilesets, ContentManager content)
         {
@@ -21,9 +21,9 @@ namespace KnightsTale.Managers
             this.content = content;
         }
 
-        public List<Tile> GetTileList()
+        public List<(TiledLayer,Sprite)> GetTileList()
         {
-            var list = new List<Tile>();
+            var list = new List<(TiledLayer, Sprite)>();
             var tileLayers = map.Layers.Where(layer => layer.type == TiledLayerType.TileLayer);
             foreach (var layer in tileLayers)
             {
@@ -45,7 +45,11 @@ namespace KnightsTale.Managers
                         var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
                         var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
 
-                        list.Add(new Tile(content.Load<Texture2D>("map/"+tileset.Name), position, map.TileWidth, map.TileHeight, source));
+                        if (layer.name == "Ground") { depth = 0; }
+                        if (layer.name == "Ground decorations") { depth = 1; }
+                        if (layer.name == "Walls") { depth = 4; }
+
+                        list.Add((layer,new Tile(content.Load<Texture2D>("map/"+tileset.Name), position + new Vector2(100,100), map.TileWidth, map.TileHeight, source, (int)(destination.Y * Globals.deepthcof))));
                     }
                 }
             }
@@ -56,7 +60,7 @@ namespace KnightsTale.Managers
             var list = new List<Rectangle>();
             var ObjectLayers = map.Layers.Where(layer => layer.type == TiledLayerType.ObjectLayer);
             var Collisions = ObjectLayers.First(layer => layer.name == ("Collisions"));
-            foreach (var obj in Collisions.objects) { list.Add(new Rectangle((int)obj.x, (int)obj.y, (int)obj.width, (int)obj.height)); }
+            foreach (var obj in Collisions.objects) { list.Add(new Rectangle((int)obj.x + 100, (int)obj.y + 100, (int)obj.width, (int)obj.height)); }
             return list;
         }
     }
