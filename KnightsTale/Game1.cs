@@ -22,7 +22,6 @@ namespace KnightsTale
             _graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
             _graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
             _graphics.ApplyChanges();
-            _graphics.ToggleFullScreen();
 
             Globals.Content = Content;
             sceneManager = new();
@@ -34,7 +33,7 @@ namespace KnightsTale
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.SpriteBatch = _spriteBatch;
-            Globals.deepthcof = 21f;
+            Globals.deepthcof = 1f;
 
             // TODO: use this.Content to load your game content here
             sceneManager.AddScene(new GameScene(Content, sceneManager, _graphics));

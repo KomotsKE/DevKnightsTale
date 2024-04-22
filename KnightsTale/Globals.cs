@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace KnightsTale
 {
-    public class Globals
+    public static class Globals
     {
         public static float TotalSeconds { get; set; }
         public static ContentManager Content { get; set; }

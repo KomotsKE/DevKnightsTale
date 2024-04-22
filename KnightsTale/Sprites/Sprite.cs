@@ -38,10 +38,6 @@
         {
         }
 
-        //public virtual void Draw()
-        //{
-        //    Globals.SpriteBatch.Draw(texture, rectangle, Color.White);
-        //}
         public virtual void Draw()
         {
             Globals.SpriteBatch.Draw(texture, rectangle, rectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, depth);

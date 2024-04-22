@@ -1,6 +1,5 @@
 ﻿using KnightsTale.Models;
 using System;
-using System.Windows.Forms;
 
 namespace KnightsTale.Managers
 {

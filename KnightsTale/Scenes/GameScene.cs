@@ -1,7 +1,6 @@
 ﻿using KnightsTale.Managers;
 using KnightsTale.Models;
 using KnightsTale.Sprites;
-using SharpDX.Direct2D1;
 using System.Collections.Generic;
 using System.Linq;
 using TiledCS;
@@ -33,12 +32,12 @@ namespace KnightsTale.Scenes
         
         public void Load()
         {
-            map = new TiledMap(Content.RootDirectory + "/Map/map.tmx");
-            tilesets = map.GetTiledTilesets(Content.RootDirectory + "/Map/");
+            map = new TiledMap(Content.RootDirectory + "/Map/TmxMaps/TestMap.tmx");
+            tilesets = map.GetTiledTilesets(Content.RootDirectory + "/Map/mapTileSets/");
             mapManager = new TileMapManager(map, tilesets,Content);
             camera = new Camera(graphics.GraphicsDevice.Viewport);
             player.Load();
-            foreach (var tile in mapManager.GetTileList())
+            foreach (var tile in mapManager.GetTileListByGroups())
             {
                 sprites.Add(tile);
             }

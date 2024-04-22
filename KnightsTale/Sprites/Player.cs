@@ -36,7 +36,7 @@ namespace KnightsTale.Sprites
 
         public override void Update(GameTime gameTime)
         {
-            layerDepth = position.Y * Globals.deepthcof;
+            layerDepth = position.Y * Globals.deepthcof + 16;
             base.Update(gameTime);
             inMove = false;
             float changeY = 0;
