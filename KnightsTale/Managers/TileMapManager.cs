@@ -1,5 +1,6 @@
-﻿using KnightsTale.Sprites;
-using SharpDX.XAudio2;
+﻿using KnightsTale.Objects;
+using KnightsTale.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TiledCS;
@@ -8,11 +9,9 @@ namespace KnightsTale.Managers
 {
     public class TileMapManager
     {
-        private TiledMap map;
-        private Dictionary<int, TiledTileset> tilesets;
-        private ContentManager content;
-        public float cons_depth_y { get { return 1f/map.Height; } }
-        public float cons_depth_x { get { return 0.00001f / map.Width; } }
+        private readonly TiledMap map;
+        private readonly Dictionary<int, TiledTileset> tilesets;
+        private readonly ContentManager content;
         
         public TileMapManager(TiledMap map, Dictionary<int, TiledTileset> tilesets, ContentManager content)
         {
@@ -46,15 +45,73 @@ namespace KnightsTale.Managers
             return list;
         }
 
-        public List<Rectangle> GetObjectList()
+        public List<Rectangle> GetCollisionsListByLayers()
         {
             var list = new List<Rectangle>();
             var ObjectLayers = map.Layers.Where(layer => layer.type == TiledLayerType.ObjectLayer);
             var Collisions = ObjectLayers.First(layer => layer.name == ("Collisions"));
-            foreach (var obj in Collisions.objects) { list.Add(new Rectangle((int)obj.x + 100, (int)obj.y + 100, (int)obj.width, (int)obj.height)); }
+            foreach (var obj in Collisions.objects) { list.Add(new Rectangle((int)obj.x, (int)obj.y, (int)obj.width, (int)obj.height)); }
             return list;
         }
 
+        public List<Rectangle> GetCollisionsListByGroups()
+        {
+            List<Rectangle> list = new();
+            var Collisions = map.Groups.SelectMany(group => group.layers)
+                .Where(layer => layer.type == TiledLayerType.ObjectLayer).First(layer => layer.name == "Collisions").objects;
+            foreach (var obj in Collisions) { list.Add(new Rectangle((int)obj.x, (int)obj.y, (int)obj.width, (int)obj.height)); }
+            return list;
+        }
+
+        public List<Door> GetDoorObjects()
+        {
+            List<Door> list = new();
+            var Doors = map.Groups.SelectMany(group => group.layers)
+                .Where(layer => layer.type == TiledLayerType.ObjectLayer).First(layer => layer.name == "Doors").objects;
+            foreach (var obj in Doors)
+            {
+                list.Add(new Door(new Rectangle((int)(obj.x + obj.width/2) , (int)(obj.y - obj.height/2), (int)obj.width, (int)obj.height)));
+            }
+
+            return list;
+        }
+
+        public Vector2 GetPlayerSpawnPoint()
+        {
+            var objectLayers = map.Groups.SelectMany(group => group.layers)
+            .Where(layer => layer.type == TiledLayerType.ObjectLayer);
+            foreach (var layer in objectLayers)
+            {
+                foreach (var obj in layer.objects)
+                {
+                    if (obj.name == "spawnPoint") { return new Vector2(obj.x,obj.y); }
+                }
+            }
+            return Vector2.Zero;
+        }
+
+        public List<TileObject> GetObjects()
+        {
+            List<TileObject> list = new();
+            var objectLayers = map.Groups.SelectMany(group => group.layers)
+                .Where(layer => layer.type == TiledLayerType.ObjectLayer).Where(layer => layer.name != "Collisions");
+            foreach (var layer in objectLayers)
+            {
+                if (layer.name == "Doors")
+                {
+                    foreach (var obj in layer.objects)
+                    {
+                        list.Add(new Door(new Rectangle((int)(obj.x + obj.width / 2), (int)(obj.y - obj.height / 2), (int)obj.width, (int)obj.height)));
+                    }
+                }
+                else if (layer.name == "Objects")
+                {
+
+                }
+            }
+            return list;
+
+        }
         public void GetTIleInfo(TiledLayer layer, List<(TiledLayer, Sprite)> list)
         {
             for (var y = 0; y < layer.height; y++)
@@ -73,9 +130,10 @@ namespace KnightsTale.Managers
                     var rect = map.GetSourceRect(mapTileSet, tileset, gid);
 
                     var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
-                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                    var destination = new Rectangle(tileX, tileY, tileset.TileWidth, tileset.TileHeight);
+                    var depth = destination.Bottom / 1000;
 
-                    list.Add((layer, new Tile(content.Load<Texture2D>("map/SpriteSheets/" + tileset.Name), position + new Vector2(100, 100), tileset.TileWidth, tileset.TileHeight, source, (int)(destination.Y * Globals.deepthcof))));
+                    list.Add((layer, new Tile(content.Load<Texture2D>("map/SpriteSheets/" + tileset.Name), position, tileset.TileWidth, tileset.TileHeight, source,depth)));
                 }
             }
         }

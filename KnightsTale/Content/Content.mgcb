@@ -25,6 +25,12 @@
 #begin Map/mapTileSets/column.tsx
 /copy:Map/mapTileSets/column.tsx
 
+#begin Map/mapTileSets/doors_leaf_closed.tsx
+/copy:Map/mapTileSets/doors_leaf_closed.tsx
+
+#begin Map/mapTileSets/doors_leaf_open.tsx
+/copy:Map/mapTileSets/doors_leaf_open.tsx
+
 #begin Map/mapTileSets/dungeontileset-extended.tsx
 /copy:Map/mapTileSets/dungeontileset-extended.tsx
 
@@ -81,6 +87,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Map/SpriteSheets/column.png
+
+#begin Map/SpriteSheets/doors_leaf_closed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Map/SpriteSheets/doors_leaf_closed.png
+
+#begin Map/SpriteSheets/doors_leaf_open.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Map/SpriteSheets/doors_leaf_open.png
 
 #begin Map/SpriteSheets/dungeontileset-extended.png
 /importer:TextureImporter
@@ -159,4 +189,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Player/knight_m_walk_anim.png
+
+#begin Weapon/weapon_bow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapon/weapon_bow.png
+
+#begin Weapon/weapon_knight_sword.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapon/weapon_knight_sword.png
 

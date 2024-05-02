@@ -1,6 +1,6 @@
-﻿namespace KnightsTale.Models
+﻿namespace KnightsTale.Input
 {
-    public class Input
+    public class Inputs
     {
         public Keys Down { get; set; }
         public Keys Up { get; set; }

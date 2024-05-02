@@ -1,6 +1,6 @@
 ﻿namespace KnightsTale.Models
 {
-    class Camera
+    public class Camera
     {
         private Matrix transform;
         public Matrix Transform
@@ -43,7 +43,7 @@
             centre = new Vector2(position.X, position.Y);
 
             transform = Matrix.CreateTranslation(new Vector3(-centre.X, -centre.Y, 0)) *
-                                                 Matrix.CreateScale(new Vector3(Zoom, Zoom, 0)) *
+                                                 Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
                                                  Matrix.CreateTranslation(new Vector3(viewport.Width / 2, viewport.Height / 2, 0));
         }
     }

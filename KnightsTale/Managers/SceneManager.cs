@@ -1,4 +1,4 @@
-﻿using KnightsTale.Models;
+﻿using KnightsTale.Scenes;
 using System.Collections.Generic;
 
 namespace KnightsTale.Managers

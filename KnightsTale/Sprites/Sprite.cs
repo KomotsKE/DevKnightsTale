@@ -1,4 +1,6 @@
-﻿namespace KnightsTale.Sprites
+﻿using KnightsTale.Models;
+
+namespace KnightsTale.Sprites
 {
     public class Sprite
     {
@@ -6,9 +8,8 @@
         public Vector2 position;
         public int width;
         public int height;
-        public Rectangle CollisionHitBox { get { return rectangle; } }
-        public float depth { get { return CollisionHitBox.Bottom * Globals.deepthcof; } }
-        public Rectangle rectangle
+        public float Depth { get; set; }
+        public Rectangle Rectangle
         {
             get
             {
@@ -33,14 +34,16 @@
             this.width = width;
             this.height = height;
         }
-
+        public virtual void Load()
+        {
+        }
         public virtual void Update(GameTime gameTime)
         {
         }
 
         public virtual void Draw()
         {
-            Globals.SpriteBatch.Draw(texture, rectangle, rectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            Globals.SpriteBatch.Draw(texture, Rectangle, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, Depth);
         }
     }
 }

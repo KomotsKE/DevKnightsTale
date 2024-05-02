@@ -1,4 +1,4 @@
-﻿namespace KnightsTale.Models
+﻿namespace KnightsTale.Scenes
 {
     public interface IScene
     {

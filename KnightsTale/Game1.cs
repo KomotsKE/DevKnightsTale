@@ -18,13 +18,16 @@ namespace KnightsTale
 
         protected override void Initialize()
         {
-            Globals.WindowSize = new(1920, 1080);
+            Globals.WindowSize = new(1200, 1080);
             _graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
             _graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
             _graphics.ApplyChanges();
 
             Globals.Content = Content;
+            Globals.Mouse = new();
+            Globals.MyKeyboard = new();
             sceneManager = new();
+
             // TODO: Add your initialization logic here
             base.Initialize();
         }
@@ -33,9 +36,10 @@ namespace KnightsTale
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.SpriteBatch = _spriteBatch;
-            Globals.deepthcof = 1f;
+            Globals.Graphics = _graphics;
 
             // TODO: use this.Content to load your game content here
+            Globals.SpriteBatch.LoadPixel(Globals.Graphics.GraphicsDevice);
             sceneManager.AddScene(new GameScene(Content, sceneManager, _graphics));
         }
 
@@ -43,9 +47,12 @@ namespace KnightsTale
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
             Globals.Update(gameTime);
+            Globals.Mouse.Update();
+            Globals.MyKeyboard.Update();
             sceneManager.GetCurrentScene().Update(gameTime);
+            Globals.Mouse.UpdateOld();
+            Globals.MyKeyboard.UpdateOld();
 
 
             // TODO: Add your update logic here
@@ -55,7 +62,7 @@ namespace KnightsTale
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(new Color(72,59,58));
 
             // TODO: Add your drawing code here
             //_spriteBatch.Begin(samplerState: SamplerState.PointClamp);

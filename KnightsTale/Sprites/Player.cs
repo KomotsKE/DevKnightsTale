@@ -2,7 +2,7 @@
 using KnightsTale.Models;
 using SharpDX.Win32;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using KnightsTale.Input;
 
 namespace KnightsTale.Sprites
 {
@@ -17,57 +17,67 @@ namespace KnightsTale.Sprites
         private Animation idleAnimation;
         private bool inMove;
         private Direction direction;
-        private float layerDepth; 
+
+        private readonly Weapon weapon;
 
 
         public List<Rectangle> CollisionGroup;
-        public Rectangle CollisionHitbox { get { return new Rectangle((int)position.X - 6, (int)position.Y-4, 12, 4); } }
-        public Input input = new Input() { Up = Keys.W, Down = Keys.S, Left = Keys.A, Right = Keys.D };
-        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup) : base(texture, position)
+        public HitBox HitBox { get { return new HitBox((int)position.X-5, (int)position.Y - 4, 10, 4, Color.Red); } }
+        public Vector2 Origin { get { return new Vector2((int)position.X, (int)position.Y-8); } }
+
+        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, Vector2 spawnPoint) : base(texture, position)
         {
             this.CollisionGroup = collisionGroup;
+            this.position = spawnPoint;
+            //this.weapon = new Weapon(Globals.Content.Load<Texture2D>("Weapon/weapon_bow"), position);
         }
 
-        public void Load()
+        public override void Load()
         {
             walkAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_walk_anim"), 16, 0.1f, true);
             idleAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_idle_anim"), 16, 0.1f, true);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Movement()
         {
-            layerDepth = position.Y * Globals.deepthcof + 16;
-            base.Update(gameTime);
             inMove = false;
             float changeY = 0;
-            if (Keyboard.GetState().IsKeyDown(input.Up))
+            if (Globals.MyKeyboard.GetPress("W"))
             { changeY -= 1; inMove = true; }
-            if (Keyboard.GetState().IsKeyDown(input.Down))
+            if (Globals.MyKeyboard.GetPress("S"))
             { changeY += 1; inMove = true; }
 
             position.Y += changeY;
 
 
             foreach (var rectangle in CollisionGroup)
-                if (rectangle.Intersects(CollisionHitbox))
+                if (rectangle.Intersects(HitBox.CollisionHitBox))
                     position.Y -= changeY;
 
             float changeX = 0;
-            if (Keyboard.GetState().IsKeyDown(input.Left))
+            if (Globals.MyKeyboard.GetPress("A"))
             { changeX -= 1; inMove = true; direction = Direction.left; }
-            if (Keyboard.GetState().IsKeyDown(input.Right))
+            if (Globals.MyKeyboard.GetPress("D")) 
             { changeX += 1; inMove = true; direction = Direction.right; }
 
             position.X += changeX;
 
             foreach (var rectangle in CollisionGroup)
-                if (rectangle.Intersects(CollisionHitbox))
+                if (rectangle.Intersects(HitBox.CollisionHitBox))
                     position.X -= changeX;
 
             if (inMove)
                 animationManager.PlayAnimation(walkAnimation);
             else
                 animationManager.PlayAnimation(idleAnimation);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            Depth = Rectangle.Bottom / 1000;
+            //weapon.Update(this);
+            Movement();
+            base.Update(gameTime);
         }
 
         public override void Draw()
@@ -79,7 +89,8 @@ namespace KnightsTale.Sprites
             if (direction == Direction.left)
                 flip = SpriteEffects.FlipHorizontally;
 
-            animationManager.Draw(Globals.SpriteBatch, position, flip, layerDepth);
+            animationManager.Draw(Globals.SpriteBatch, position, flip, Depth);
+            //weapon.Draw();
         }
 
     }
