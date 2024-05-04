@@ -8,7 +8,9 @@ namespace KnightsTale.Sprites
         public Vector2 position;
         public int width;
         public int height;
+        public float rotation;
         public float Depth { get; set; }
+        public Vector2 Origin { get { return new Vector2(width / 2, height / 2); } }
         public Rectangle Rectangle
         {
             get

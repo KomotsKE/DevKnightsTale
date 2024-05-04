@@ -1,9 +1,8 @@
 ﻿using KnightsTale.Models;
-using System;
 
 namespace KnightsTale.Managers
 {
-    struct AnimationManager
+    public struct AnimationManager
     {
         Animation animation;
         public Animation Animation
@@ -40,7 +39,7 @@ namespace KnightsTale.Managers
             if (animation == null)
                  throw new NotSupportedException("No animation selected");
 
-            timer += Globals.TotalSeconds;
+            timer += (float)Globals.gameTime.ElapsedGameTime.TotalSeconds;
             while (timer >= animation.FrameTime)
             {
                 timer -= animation.FrameTime;

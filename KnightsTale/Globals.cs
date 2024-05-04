@@ -4,25 +4,24 @@ using System;
 
 namespace KnightsTale
 {
+    public delegate void PassObject(object obj);
+    public delegate object PassObjectAndReturn(Object obj);
+
     public static class Globals
     {
-        public static float TotalSeconds { get; set; }
         public static ContentManager Content { get; set; }
         public static SpriteBatch SpriteBatch { get; set; }
         public static GraphicsDeviceManager Graphics { get; set; }
         public static Point WindowSize { get; set; } 
         public static int ScreenWidth { get { return WindowSize.X; } }
         public static int ScreenHeight { get { return WindowSize.Y; } }
+        public static float DeepCoef { get; set; }
+        public static GameTime gameTime { get; set; }
 
         public static MouseControl Mouse;
         public static MyKeyboard MyKeyboard;
 
         public static Camera GameCamera { get; set; }
-
-        public static void Update(GameTime gametime)
-        {
-            TotalSeconds = (float)gametime.ElapsedGameTime.TotalSeconds;
-        }
 
         public static float RotateTowards(Vector2 pos, Vector2 focus)
         {

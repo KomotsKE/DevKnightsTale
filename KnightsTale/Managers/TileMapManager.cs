@@ -1,8 +1,5 @@
 ﻿using KnightsTale.Objects;
 using KnightsTale.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TiledCS;
 
 namespace KnightsTale.Managers
@@ -131,7 +128,11 @@ namespace KnightsTale.Managers
 
                     var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
                     var destination = new Rectangle(tileX, tileY, tileset.TileWidth, tileset.TileHeight);
-                    var depth = destination.Bottom / 1000;
+                    float offset;
+                    if (layer.name == "Columns") offset = 16f;
+                    else if (layer.name == "WallCorners") offset = -16f;
+                    else offset = 0f;
+                    var depth = (destination.Bottom - offset) * Globals.DeepCoef;
 
                     list.Add((layer, new Tile(content.Load<Texture2D>("map/SpriteSheets/" + tileset.Name), position, tileset.TileWidth, tileset.TileHeight, source,depth)));
                 }

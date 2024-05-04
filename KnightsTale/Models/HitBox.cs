@@ -1,8 +1,10 @@
-﻿namespace KnightsTale.Models
+﻿using System.Windows.Forms;
+
+namespace KnightsTale.Models
 {
     public class HitBox
     {
-        public Rectangle CollisionHitBox {  get; }
+        public Rectangle CollisionHitBox { get; set; }
         public int width { get; }
         public int height {  get; }
         public Color color {  get; set; }
@@ -21,6 +23,11 @@
             this.height = rectangle.Height;
             this.color = color;
             CollisionHitBox = rectangle;
+        }
+
+        public void Update(int x, int y)
+        {
+
         }
 
         public void Draw()

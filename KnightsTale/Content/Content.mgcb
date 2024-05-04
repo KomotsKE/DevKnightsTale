@@ -190,6 +190,18 @@
 /processorParam:TextureFormat=Color
 /build:Player/knight_m_walk_anim.png
 
+#begin Projectiles/weapon_arrow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Projectiles/weapon_arrow.png
+
 #begin Weapon/weapon_bow.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -26,6 +26,7 @@ namespace KnightsTale
             Globals.Content = Content;
             Globals.Mouse = new();
             Globals.MyKeyboard = new();
+            Globals.DeepCoef = 0.001f;
             sceneManager = new();
 
             // TODO: Add your initialization logic here
@@ -47,7 +48,7 @@ namespace KnightsTale
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            Globals.Update(gameTime);
+            Globals.gameTime = gameTime;
             Globals.Mouse.Update();
             Globals.MyKeyboard.Update();
             sceneManager.GetCurrentScene().Update(gameTime);

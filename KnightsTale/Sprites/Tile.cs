@@ -17,7 +17,7 @@
 
         public override void Draw()
         {
-            Globals.SpriteBatch.Draw(texture, Rectangle, source, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+            Globals.SpriteBatch.Draw(texture, Rectangle, source, Color.White, 0f, Vector2.Zero, SpriteEffects.None, Depth);
         }
     }
 }
