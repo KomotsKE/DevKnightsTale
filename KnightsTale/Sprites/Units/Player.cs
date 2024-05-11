@@ -1,85 +1,94 @@
 ﻿using KnightsTale.Managers;
 using KnightsTale.Models;
 using KnightsTale.Objects;
+using KnightsTale.Sprites.Weapons;
 
 namespace KnightsTale.Sprites.Units
 {
     public class Player : Unit
     {
-        private readonly Weapon weapon;
-        private HitBox hitBox { get { return new HitBox((int)position.X - 5, (int)position.Y - 4, 10, 4, Color.Red); ; } }
-
-        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, List<Door> doorGroup, Vector2 spawnPoint) : base(texture, position, collisionGroup, doorGroup, spawnPoint)
+        private HitBox HitBox { get { return new HitBox((int)Position.X - 5, (int)Position.Y - 4, 10, 4, Color.Red); ; } }
+        private Vector2 Movement { get; set; }
+        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, List<Door> doorGroup) : base(texture, position, collisionGroup, doorGroup)
         {
-            this.weapon = new Weapon(Globals.Content.Load<Texture2D>("Weapon/weapon_bow"), position);
-            UnitHitBox = new HitBox((int)position.X - 5, (int)position.Y - 4, 10, 4, Color.Red);
+            weapon = new Crossbow(Globals.Content.Load<Texture2D>("Weapon/Crossbow_2"), Globals.Content.Load<Texture2D>("Weapon/Loaded_Crossbow_2"), this.Position);
+            Speed = 1f;
+            Health = 10;
+            HealthMax = Health;
+            WalkAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_walk_anim"), 16, 0.1f, true);
+            IdleAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_idle_anim"), 16, 0.1f, true);
         }
 
-        public override void Load()
+        public override void Update()
         {
-            walkAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_walk_anim"), 16, 0.1f, true);
-            idleAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_idle_anim"), 16, 0.1f, true);
-        }
-
-        public void Movement()
-        {
-            inMove = false;
-            float changeY = 0;
-            if (Globals.MyKeyboard.GetPress("W"))
-            { changeY -= 1; inMove = true; }
-            if (Globals.MyKeyboard.GetPress("S"))
-            { changeY += 1; inMove = true; }
-
-            position.Y += changeY;
-
-
-            foreach (var rectangle in CollisionGroup)
-                if (rectangle.Intersects(hitBox.CollisionHitBox))
-                    position.Y -= changeY;
-
-            foreach (var door in DoorGroup)
-                if (door.DoorHitBox.CollisionHitBox.Intersects(hitBox.CollisionHitBox) && !door.IsOpened)
-                    position.Y -= changeY;
-
-            float changeX = 0;
-            if (Globals.MyKeyboard.GetPress("A"))
-            { changeX -= 1; inMove = true; direction = Direction.left; }
-            if (Globals.MyKeyboard.GetPress("D"))
-            { changeX += 1; inMove = true; direction = Direction.right; }
-
-            position.X += changeX;
-
-            foreach (var rectangle in CollisionGroup)
-                if (rectangle.Intersects(hitBox.CollisionHitBox))
-                    position.X -= changeX;
-
-            foreach (var door in DoorGroup)
-                if (door.DoorHitBox.CollisionHitBox.Intersects(hitBox.CollisionHitBox) && !door.IsOpened)
-                    position.X -= changeX;
-
-            if (inMove)
-                animationManager.PlayAnimation(walkAnimation);
-            else
-                animationManager.PlayAnimation(idleAnimation);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            UnitHitBox = new HitBox((int)position.X - 5, (int)position.Y - 4, 10, 4, Color.Red);
-            Depth = (position.Y) * Globals.DeepCoef;
+            Depth = (Position.Y) * Globals.DeepCoef;
             weapon.Update(this);
-            Movement();
-            if (Globals.Mouse.LeftClick())
+            MovementLogic();
+            if (Globals.MyKeyboard.GetPress("LeftShift"))
             {
-                GameGlobals.PassProjectile(new Arrow(Globals.Content.Load<Texture2D>("Projectiles/weapon_arrow"),position,this, Globals.ScreenToWorldSpace(new Vector2(Globals.Mouse.newMousePos.X,Globals.Mouse.newMousePos.Y))));
+                Speed = 1.3f;
             }
+            else Speed = 1f;
+            base.Update();
         }
 
         public override void Draw()
         {
             base.Draw();
             weapon.Draw();
-            UnitHitBox.Draw();
+        }
+
+        private void PlayAnimation()
+        {
+            if (InMove)
+                AnimationManager.PlayAnimation(WalkAnimation);
+            else
+                AnimationManager.PlayAnimation(IdleAnimation);
+        }
+
+        public void CheckCollision(float changeX, float changeY)
+        {
+            foreach (var rectangle in CollisionGroup)
+                if (rectangle.Intersects(HitBox.CollisionHitBox))
+                    Position.Y -= changeY;
+
+            foreach (var door in DoorGroup)
+                if (door.DoorHitBox.CollisionHitBox.Intersects(HitBox.CollisionHitBox) && !door.IsOpened)
+                    Position.Y -= changeY;
+
+            foreach (var rectangle in CollisionGroup)
+                if (rectangle.Intersects(HitBox.CollisionHitBox))
+                    Position.X -= changeX;
+
+            foreach (var door in DoorGroup)
+                if (door.DoorHitBox.CollisionHitBox.Intersects(HitBox.CollisionHitBox) && !door.IsOpened)
+                    Position.X -= changeX;
+        }
+
+        public void MovementLogic()
+        {
+            InMove = false;
+            Movement = Vector2.Zero;
+
+            if (Globals.MyKeyboard.GetPress("W"))
+            { Movement += new Vector2(0, -1); }
+            if (Globals.MyKeyboard.GetPress("S"))
+            { Movement += new Vector2(0, 1); }
+            if (Globals.MyKeyboard.GetPress("A"))
+            { Movement += new Vector2(-1, 0); Direction = Direction.left; }
+            if (Globals.MyKeyboard.GetPress("D"))
+            { Movement += new Vector2(1, 0); Direction = Direction.right; }
+
+            if (Movement != Vector2.Zero) InMove = true;
+
+            Movement *= Speed;
+
+            if (Movement.LengthSquared() > Speed * Speed) Movement *= (float)(1 / Math.Sqrt(2)); ;
+
+            Position += Movement;
+
+            CheckCollision(Movement.X, Movement.Y);
+            PlayAnimation();
         }
 
     }

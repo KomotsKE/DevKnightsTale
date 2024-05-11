@@ -34,26 +34,39 @@ namespace KnightsTale.Managers
             timer = 0;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects spriteEffects, float layerDepth)
+        public void RemoveAnimation()
+        {
+            animation = null;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects spriteEffects, float rotation, float scale, float layerDepth, Color color)
         {
             if (animation == null)
-                 throw new NotSupportedException("No animation selected");
-
-            timer += (float)Globals.gameTime.ElapsedGameTime.TotalSeconds;
-            while (timer >= animation.FrameTime)
+                throw new NotSupportedException("No animation selected");
+            if (!GameGlobals.IsPaused && !GameGlobals.IsOver)
             {
-                timer -= animation.FrameTime;
-
-                if (animation.IsLooping)
+                timer += (float)Globals.gameTime.ElapsedGameTime.TotalSeconds;
+                while (timer >= animation.FrameTime)
                 {
-                    frameIndex = (frameIndex + 1) % animation.FrameCount;
+                    timer -= animation.FrameTime;
+
+                    if (animation.IsLooping)
+                    {
+                        frameIndex = (frameIndex + 1) % animation.FrameCount;
+                    }
+                    else frameIndex = Math.Min(frameIndex + 1, animation.FrameCount - 1);
                 }
-                else frameIndex = Math.Min(frameIndex + 1, animation.FrameCount - 1);
+
+                Rectangle rectangle = new Rectangle(frameIndex * Animation.FrameWidth, 0, Animation.FrameWidth, Animation.FrameHeight);
+
+                spriteBatch.Draw(Animation.Texture, position, rectangle, color, rotation, Origin, scale, spriteEffects, layerDepth);
+            }
+            else
+            {
+                Rectangle rectangle = new Rectangle(frameIndex * Animation.FrameWidth, 0, Animation.FrameWidth, Animation.FrameHeight);
+                spriteBatch.Draw(Animation.Texture, position, rectangle, color, rotation, Origin, scale, spriteEffects, layerDepth);
             }
 
-            Rectangle rectangle = new Rectangle(frameIndex * Animation.FrameWidth,0,Animation.FrameWidth,Animation.FrameHeight);
-
-            spriteBatch.Draw(Animation.Texture, position, rectangle, Color.White, 0f, Origin, 1f, spriteEffects, layerDepth);
         }
     }
 }

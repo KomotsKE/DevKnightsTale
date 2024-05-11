@@ -16,5 +16,9 @@ namespace KnightsTale.Managers
         public void RemoveScene() { sceneStack.Pop(); }
 
         public IScene GetCurrentScene() { return sceneStack.Peek(); }
+
+        public void SwithSceneTo(IScene scene) { RemoveScene(); AddScene(scene); scene.Update(); }
+
+        public void NextScene() { RemoveScene(); GetCurrentScene().Update(); }
     }
 }

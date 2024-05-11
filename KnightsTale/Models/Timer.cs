@@ -1,7 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
-
-namespace KnightsTale.Models
+﻿namespace KnightsTale.Models
 {
     public class Timer
     {
@@ -10,15 +7,15 @@ namespace KnightsTale.Models
         protected TimeSpan timer = new TimeSpan();
 
 
-        public Timer(int m)
+        public Timer(int mS)
         {
             goodToGo = false;
-            mSec = m;
+            mSec = mS;
         }
-        public Timer(int m, bool STARTLOADED)
+        public Timer(int mS, bool startLoaded)
         {
-            goodToGo = STARTLOADED;
-            mSec = m;
+            goodToGo = startLoaded;
+            mSec = mS;
         }
 
         public int MSec
@@ -31,24 +28,22 @@ namespace KnightsTale.Models
             get { return (int)timer.TotalMilliseconds; }
         }
 
-
-
         public void UpdateTimer()
         {
             timer += Globals.gameTime.ElapsedGameTime;
         }
 
-        public void UpdateTimer(float Speed)
+        public void UpdateTimerSpeed(float Speed)
         {
             timer += TimeSpan.FromTicks((long)(Globals.gameTime.ElapsedGameTime.Ticks * Speed));
         }
 
-        public virtual void AddToTimer(int MSEC)
+        public virtual void AddTimeToTimer(int MSEC)
         {
             timer += TimeSpan.FromMilliseconds((long)(MSEC));
         }
 
-        public bool Test()
+        public bool Check()
         {
             if (timer.TotalMilliseconds >= mSec || goodToGo)
             {
@@ -70,10 +65,10 @@ namespace KnightsTale.Models
             goodToGo = false;
         }
 
-        public void Reset(int NEWTIMER)
+        public void ResetAndCreateNewTimer(int newTImer)
         {
             timer = TimeSpan.Zero;
-            MSec = NEWTIMER;
+            MSec = newTImer;
             goodToGo = false;
         }
 
@@ -83,25 +78,14 @@ namespace KnightsTale.Models
             goodToGo = false;
         }
 
-        public virtual XElement ReturnXML()
+        public void SetTimer(TimeSpan time)
         {
-            XElement xml = new XElement("Timer",
-                                    new XElement("mSec", mSec),
-                                    new XElement("timer", MsTimer));
-
-
-
-            return xml;
+            timer = time;
         }
 
-        public void SetTimer(TimeSpan TIME)
+        public virtual void SetTimer(int msec)
         {
-            timer = TIME;
-        }
-
-        public virtual void SetTimer(int MSEC)
-        {
-            timer = TimeSpan.FromMilliseconds((long)(MSEC));
+            timer = TimeSpan.FromMilliseconds((long)(msec));
         }
     }
 }

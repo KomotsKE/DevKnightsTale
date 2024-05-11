@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KnightsTale
+﻿namespace KnightsTale
 {
     public class GameGlobals
     {
-        public static PassObject PassProjectile;
+        public static bool IsOver;
+        public static bool IsPaused;
+        public static int Score;
+        public static PassObject PassProjectile, PassMonster;
     }
 }

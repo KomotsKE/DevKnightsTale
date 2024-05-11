@@ -1,27 +1,25 @@
-﻿using System.Windows.Forms;
-
-namespace KnightsTale.Models
+﻿namespace KnightsTale.Models
 {
     public class HitBox
     {
         public Rectangle CollisionHitBox { get; set; }
-        public int width { get; }
-        public int height {  get; }
-        public Color color {  get; set; }
+        public int Width { get; }
+        public int Height { get; }
+        public Color Color { get; set; }
 
-        public HitBox(int x, int y, int width, int height, Color color) 
+        public HitBox(int x, int y, int width, int height, Color color)
         {
-            this.width = width;
-            this.height = height;
-            this.color = color;
+            this.Width = width;
+            this.Height = height;
+            this.Color = color;
             CollisionHitBox = new Rectangle(x, y, width, height);
         }
 
         public HitBox(Rectangle rectangle, Color color)
         {
-            this.width = rectangle.Width;
-            this.height = rectangle.Height;
-            this.color = color;
+            this.Width = rectangle.Width;
+            this.Height = rectangle.Height;
+            this.Color = color;
             CollisionHitBox = rectangle;
         }
 
@@ -32,7 +30,7 @@ namespace KnightsTale.Models
 
         public void Draw()
         {
-            Globals.SpriteBatch.DrawRectangle(CollisionHitBox, color);
+            Globals.SpriteBatch.DrawRectangle(CollisionHitBox, Color);
         }
     }
 }

@@ -1,51 +1,54 @@
-﻿using KnightsTale.Models;
-
-namespace KnightsTale.Sprites
+﻿namespace KnightsTale.Sprites
 {
     public class Sprite
     {
-        public Texture2D texture;
-        public Vector2 position;
-        public int width;
-        public int height;
-        public float rotation;
-        public float Depth { get; set; }
-        public Vector2 Origin { get { return new Vector2(width / 2, height / 2); } }
+        public Texture2D Texture;
+        public Vector2 Position;
+        public int Width, Height;
+        public float Depth, Rotation;
+        public Vector2 Origin { get; set; }
+        public Color Color;
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle((int)position.X, (int)position.Y,
-                    width, height);
+                return new Rectangle((int)Position.X, (int)Position.Y,
+                    Width, Height);
             }
         }
 
 
         public Sprite(Texture2D texture, Vector2 position)
         {
-            this.texture = texture;
-            this.position = position;
-            width = texture.Width;
-            height = texture.Height;
+            this.Texture = texture;
+            this.Position = position;
+            Width = texture.Width;
+            Height = texture.Height;
+            Color = Color.White;
         }
-        
+
         public Sprite(Texture2D texture, Vector2 position, int width, int height)
         {
-            this.texture = texture;
-            this.position = position;
-            this.width = width;
-            this.height = height;
+            this.Texture = texture;
+            this.Position = position;
+            this.Width = width;
+            this.Height = height;
+            Color = Color.White;
         }
-        public virtual void Load()
-        {
-        }
-        public virtual void Update(GameTime gameTime)
+
+        public virtual void Update()
         {
         }
 
         public virtual void Draw()
         {
-            Globals.SpriteBatch.Draw(texture, Rectangle, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, Depth);
+            Globals.SpriteBatch.Draw(Texture, Rectangle, null, Color, Rotation, Origin, SpriteEffects.None, Depth);
+        }
+
+        public virtual void Draw(Vector2 offset, Color color)
+        {
+            Globals.SpriteBatch.Draw(Texture, new Rectangle((int)(Rectangle.X + offset.X), (int)(Rectangle.Y + offset.Y), Width, Height)
+                , null, color, Rotation, Origin, SpriteEffects.None, Depth);
         }
     }
 }

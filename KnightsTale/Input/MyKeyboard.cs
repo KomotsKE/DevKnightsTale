@@ -3,18 +3,17 @@
     public class MyKeyboard
     {
 
-        public KeyboardState newKeyboard, oldKeyboard;
+        public KeyboardState NewKeyboard, OldKeyboard;
 
-        public List<Key> pressedKeys = new(), previousPressedKeys = new();
+        public List<Key> PressedKeys = new(), PreviousPressedKeys = new();
 
         public MyKeyboard()
         {
-
         }
 
         public virtual void Update()
         {
-            newKeyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+            NewKeyboard = Keyboard.GetState();
 
             GetPressedKeys();
 
@@ -22,22 +21,22 @@
 
         public void UpdateOld()
         {
-            oldKeyboard = newKeyboard;
+            OldKeyboard = NewKeyboard;
 
-            previousPressedKeys = new List<Key>();
-            for (int i = 0; i < pressedKeys.Count; i++)
+            PreviousPressedKeys = new List<Key>();
+            for (int i = 0; i < PressedKeys.Count; i++)
             {
-                previousPressedKeys.Add(pressedKeys[i]);
+                PreviousPressedKeys.Add(PressedKeys[i]);
             }
         }
 
 
-        public bool GetPress(string KEY)
+        public bool GetPress(string key)
         {
 
-            for (int i = 0; i < pressedKeys.Count; i++)
+            for (int i = 0; i < PressedKeys.Count; i++)
             {
-                if (pressedKeys[i].key == KEY)
+                if (PressedKeys[i].key == key)
                 {
                     return true;
                 }
@@ -45,21 +44,21 @@
             return false;
         }
 
-        public bool GetSinglePress(string KEY)
+        public bool GetSinglePress(string key)
         {
-            for (int i = 0; i < pressedKeys.Count;i++)
+            for (int i = 0; i < PressedKeys.Count; i++)
             {
                 bool pressed = false;
-                for (int j = 0; j < previousPressedKeys.Count; j++)
+                for (int j = 0; j < PreviousPressedKeys.Count; j++)
                 {
-                    if (pressedKeys[i].key == previousPressedKeys[j].key)
+                    if (PressedKeys[i].key == PreviousPressedKeys[j].key)
                     {
                         pressed = true;
                         break;
                     }
                 }
 
-                if (!pressed && (pressedKeys[i].key == KEY || pressedKeys[i].print == KEY))
+                if (!pressed && (PressedKeys[i].key == key || PressedKeys[i].Print == key))
                 {
                     return true;
                 }
@@ -70,13 +69,11 @@
 
         public virtual void GetPressedKeys()
         {
-            //bool found = false;
-
-            pressedKeys.Clear();
-            for (int i = 0; i < newKeyboard.GetPressedKeys().Length; i++)
+            PressedKeys.Clear();
+            for (int i = 0; i < NewKeyboard.GetPressedKeys().Length; i++)
             {
 
-                pressedKeys.Add(new Key(newKeyboard.GetPressedKeys()[i].ToString(), 1));
+                PressedKeys.Add(new Key(NewKeyboard.GetPressedKeys()[i].ToString(), 1));
 
             }
         }

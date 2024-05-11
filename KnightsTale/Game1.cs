@@ -9,6 +9,7 @@ namespace KnightsTale
         private SpriteBatch _spriteBatch;
         private SceneManager sceneManager;
 
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -18,9 +19,10 @@ namespace KnightsTale
 
         protected override void Initialize()
         {
-            Globals.WindowSize = new(1200, 1080);
+            Globals.WindowSize = new(1920, 1080);
             _graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
             _graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
+            _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
 
             Globals.Content = Content;
@@ -29,7 +31,9 @@ namespace KnightsTale
             Globals.DeepCoef = 0.001f;
             sceneManager = new();
 
-            // TODO: Add your initialization logic here
+            Globals.CombatCursor = MouseCursor.FromTexture2D(Globals.Content.Load<Texture2D>("Cursors/Scope"), 16, 16);
+            Globals.BaseCursor = MouseCursor.FromTexture2D(Globals.Content.Load<Texture2D>("Cursors/BaseCursor"), 0, 0);
+
             base.Initialize();
         }
 
@@ -39,40 +43,60 @@ namespace KnightsTale
             Globals.SpriteBatch = _spriteBatch;
             Globals.Graphics = _graphics;
 
-            // TODO: use this.Content to load your game content here
+            Globals.SceneManager = sceneManager;
+            Globals.SoundManager = new SoundManager(null);
+
+            Globals.SceneManager.AddScene(new GameScene());
+            Globals.SceneManager.AddScene(new MainMenu(NextScene, ExitGame));
+
             Globals.SpriteBatch.LoadPixel(Globals.Graphics.GraphicsDevice);
-            sceneManager.AddScene(new GameScene(Content, sceneManager, _graphics));
+            LoadSounds();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+
             Globals.gameTime = gameTime;
             Globals.Mouse.Update();
             Globals.MyKeyboard.Update();
-            sceneManager.GetCurrentScene().Update(gameTime);
+
+            Globals.SceneManager.GetCurrentScene().Update();
+
             Globals.Mouse.UpdateOld();
             Globals.MyKeyboard.UpdateOld();
-
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(72,59,58));
-
-            // TODO: Add your drawing code here
-            //_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-            sceneManager.GetCurrentScene().Draw();
-
-            //_spriteBatch.End();
-
+            GraphicsDevice.Clear(new Color(34, 34, 34));
+            Globals.SceneManager.GetCurrentScene().Draw();
             base.Draw(gameTime);
+        }
+
+        public void ExitGame(object Info)
+        {
+            Exit();
+        }
+
+        public void NextScene(object Info)
+        {
+            if (Globals.SceneManager.sceneStack.Count > 1)
+            {
+                Globals.SceneManager.NextScene();
+            }
+        }
+
+        public void LoadSounds()
+        {
+            Globals.SoundManager.AddSound("Shoot", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Crossbow_shoot2"));
+            Globals.SoundManager.AddSound("Loading", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Crossbow_loading_middle1"));
+            Globals.SoundManager.AddSound("LoadingEnd", 1f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Crossbow_loading_end_1"));
+            Globals.SoundManager.AddSound("UIClick", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Wood Block3"));
+            Globals.SoundManager.AddSound("UIHover", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Coffee1"));
+            Globals.SoundManager.AddSound("Open", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/05_door_open_1"));
+            Globals.SoundManager.AddSound("Close", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/06_door_close_1"));
         }
     }
 }

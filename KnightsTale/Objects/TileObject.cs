@@ -6,9 +6,9 @@
         public int Width { get; }
         public int Height { get; }
         public Rectangle ObjRectangle { get { return new Rectangle((int)Position.X, (int)Position.Y, Width, Height); } }
-        public Vector2 Origin { get { return new Vector2(Width/2, Height/2); } }
+        public Vector2 Origin { get { return new Vector2(Width / 2, Height / 2); } }
 
-        public TileObject(Vector2 position, int width, int height) 
+        public TileObject(Vector2 position, int width, int height)
         {
             this.Position = position;
             this.Width = width;
@@ -20,12 +20,6 @@
             Position = new Vector2(rectangle.X, rectangle.Y);
             Width = rectangle.Width;
             Height = rectangle.Height;
-        }
-
-
-        public virtual void Load()
-        {
-
         }
 
         public virtual void Update()

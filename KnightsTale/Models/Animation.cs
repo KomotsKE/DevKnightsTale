@@ -27,7 +27,7 @@
         {
             get { return isLooping; }
         }
-        
+
         public Animation(Texture2D newTexture, int newFrameWidth, float newFrameTime, bool newIsLooping)
         {
             texture = newTexture;
