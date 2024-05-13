@@ -6,16 +6,6 @@
         public float FScore, Cost, CurrentDistance, DistLef;
         public Vector2 Parent, Position;
 
-        public GridLocation()
-        {
-            Filled = false;
-            Impassable = false;
-            UnPathable = false;
-            HasBeenUsed = false;
-            IsViewable = false;
-            Cost = 1.0f;
-
-        }
 
         public GridLocation(float cost, bool filled)
         {
@@ -47,13 +37,10 @@
             this.CurrentDistance = currentDist;
         }
 
-        public virtual void SetToFilled(bool impassible)
+        public virtual void SwitchGridImassability(bool gridCondition)
         {
-            Filled = impassible;
-            if (impassible)
-            {
-                Impassable = true;
-            }
+            Filled = gridCondition;
+            Impassable = gridCondition;
         }
     }
 }

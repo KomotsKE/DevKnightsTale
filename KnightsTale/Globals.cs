@@ -11,7 +11,7 @@ namespace KnightsTale
     {
         public static MouseCursor CombatCursor { get; set; }
         public static MouseCursor BaseCursor { get; set; }
-        public static Random Random = new Random();
+        private static Random random = new();
         public static ContentManager Content { get; set; }
         public static SpriteBatch SpriteBatch { get; set; }
         public static GraphicsDeviceManager Graphics { get; set; }
@@ -21,12 +21,15 @@ namespace KnightsTale
         public static int ScreenWidth { get { return WindowSize.X; } }
         public static int ScreenHeight { get { return WindowSize.Y; } }
         public static float DeepCoef { get; set; }
-        public static GameTime gameTime { get; set; }
+        public static GameTime GameTime { get; set; }
 
-        public static MouseControl Mouse;
-        public static MyKeyboard MyKeyboard;
+        private static MouseControl mouse;
+        private static MyKeyboard myKeyboard;
 
         public static Camera GameCamera { get; set; }
+        public static MyKeyboard MyKeyboard { get => myKeyboard; set => myKeyboard = value; }
+        public static MouseControl Mouse { get => mouse; set => mouse = value; }
+        public static Random Random { get => random; set => random = value; }
 
         public static float RotateTowards(Vector2 pos, Vector2 focus)
         {

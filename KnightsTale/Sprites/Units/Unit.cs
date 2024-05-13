@@ -1,10 +1,4 @@
-﻿using KnightsTale.Grids;
-using KnightsTale.Managers;
-using KnightsTale.Models;
-using KnightsTale.Objects;
-using KnightsTale.Sprites.Weapons;
-
-namespace KnightsTale.Sprites.Units
+﻿namespace KnightsTale.Sprites.Units
 {
     public class Unit : Sprite
     {
@@ -13,30 +7,29 @@ namespace KnightsTale.Sprites.Units
         public Animation IdleAnimation;
         public bool InMove;
         public Direction Direction;
+        public string Type;
 
         public List<Rectangle> CollisionGroup;
         public List<Door> DoorGroup;
-
-        public Weapon weapon;
 
         public bool Dead;
         public float HitDist, Speed, Health, HealthMax;
         public Timer ColorSwap;
         public bool UnitGetHit;
 
+
         protected Vector2 MoveTo;
         protected List<Vector2> PathNodes = new();
 
-        public Unit(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, List<Door> doorGroup) : base(texture, position)
+        public Unit(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, List<Door> doorGroup, string type) : base(texture, position)
         {
+            Type = type;
             ColorSwap = new Timer(500);
             MoveTo = new Vector2(position.X, position.Y);
             CollisionGroup = collisionGroup;
             DoorGroup = doorGroup;
             Dead = false;
             HitDist = 20f;
-            Health = 1;
-            HealthMax = Health;
         }
 
         public virtual void GetHit(float damage)
@@ -97,7 +90,7 @@ namespace KnightsTale.Sprites.Units
         {
             PathNodes.Clear();
             Vector2 tempStartSlot = grid.GetSlotFromPixel(Position);
-            List<Vector2> tempPath = grid.GetPath(tempStartSlot, end, true);
+            List<Vector2> tempPath = grid.GetPath(tempStartSlot, end);
 
             if (tempPath == null || tempPath.Count == 0)
             {
@@ -106,8 +99,15 @@ namespace KnightsTale.Sprites.Units
             return tempPath;
         }
 
+        
+
         public virtual void MoveUnit()
         {
+            InMove = true;
+            foreach (var door in DoorGroup)
+            {
+                if (!door.IsOpened && door.DoorHitBox.CollisionHitBox.Contains(new Vector2(Position.X, Position.Y))) break;
+            }
             if (Position.X != MoveTo.X || Position.Y != MoveTo.Y)
             {
                 Position += Globals.RadialMovement(MoveTo, Position, Speed);
@@ -121,6 +121,7 @@ namespace KnightsTale.Sprites.Units
 
                 Position += Globals.RadialMovement(MoveTo, Position, Speed);
             }
+            else { InMove = false; }
         }
     }
 }

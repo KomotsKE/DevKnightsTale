@@ -2,11 +2,11 @@
 {
     public class Button : Sprite
     {
-        Texture2D HoveredTexture;
-        Texture2D ClickedTexture;
+        private readonly Texture2D HoveredTexture;
+        private readonly Texture2D ClickedTexture;
+        private readonly PassObject ButtonClicked;
         public bool IsPressed, IsHovered;
         public object Info;
-        PassObject ButtonClicked;
         public float Scale;
 
         public Button(Texture2D texture, Texture2D hoveredTexture, Texture2D clickedTexture, Vector2 position, PassObject buttonClicked, float scale) : base(texture, position)
@@ -55,10 +55,7 @@
 
         public virtual void RunButtonClick()
         {
-            if (ButtonClicked != null)
-            {
-                ButtonClicked(Info);
-            }
+            ButtonClicked?.Invoke(Info);
             Reset();
         }
 
@@ -69,7 +66,7 @@
 
         private bool HoverImage()
         {
-            Vector2 mousePos = new Vector2(Globals.Mouse.NewMousePos.X, Globals.Mouse.NewMousePos.Y);
+            Vector2 mousePos = new(Globals.Mouse.NewMousePos.X, Globals.Mouse.NewMousePos.Y);
 
             if (Rectangle.Contains(mousePos))
             {

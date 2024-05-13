@@ -1,6 +1,4 @@
-﻿using KnightsTale.Scenes;
-
-namespace KnightsTale.Managers
+﻿namespace KnightsTale.Managers
 {
     public class SceneManager
     {

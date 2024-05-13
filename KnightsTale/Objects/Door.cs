@@ -1,49 +1,49 @@
-﻿using KnightsTale.Grids;
-using KnightsTale.Models;
-
-namespace KnightsTale.Objects
+﻿namespace KnightsTale.Objects
 {
     public class Door : TileObject
     {
         public bool IsOpened;
         public bool CanOpen;
         public bool NeedKey;
+        public string Key;
         public HitBox DoorHitBox;
-        private Texture2D OpenedTexture;
-        private Texture2D CloseedTexture;
+        private readonly Texture2D OpenedTexture;
+        private readonly Texture2D CloseedTexture;
         private readonly float UsingDistance;
         private float DistanceToPlayer;
-        private SquareGrid Grid;
-        public Door(Rectangle rectangle, SquareGrid grid) : base(rectangle)
+        public Door(Rectangle rectangle, string key) : base(rectangle)
         {
-            Grid = grid;
+            if (key == "None") { NeedKey = false; }
+            else { NeedKey = true; Key = key; }
             IsOpened = false;
-            CanOpen = true;
+            CanOpen = !NeedKey;
             UsingDistance = 25f;
             this.DoorHitBox = new HitBox((int)Position.X - Width / 2, (int)Position.Y - Height / 2 + Height - 5, (int)Width, 5, Color.Blue);
             OpenedTexture = Globals.Content.Load<Texture2D>("Map/SpriteSheets/doors_leaf_open");
             CloseedTexture = Globals.Content.Load<Texture2D>("Map/SpriteSheets/doors_leaf_closed");
         }
 
-        public void Update(Vector2 playerPosition)
+        public void Update(Player player, SquareGrid grid)
         {
-            DistanceToPlayer = Vector2.Distance(Position, playerPosition);
-            if (DistanceToPlayer < UsingDistance && Globals.MyKeyboard.GetSinglePress("F"))
+            if (NeedKey)
+            {
+               if (player.Keys.Contains(Key)) { CanOpen = true; player.Keys.Remove(Key); }
+            }
+            var posOnGrid = grid.GetSlotFromPixel(Position);
+            DistanceToPlayer = Vector2.Distance(Position, player.Position);
+            grid.slots[(int)posOnGrid.X][(int)posOnGrid.Y].SwitchGridImassability(!IsOpened);
+            grid.slots[(int)posOnGrid.X - 1][(int)posOnGrid.Y].SwitchGridImassability(!IsOpened);
+            grid.slots[(int)posOnGrid.X][(int)posOnGrid.Y + 1].SwitchGridImassability(!IsOpened);
+            grid.slots[(int)posOnGrid.X - 1][(int)posOnGrid.Y + 1].SwitchGridImassability(!IsOpened);
+            if (DistanceToPlayer < UsingDistance && Globals.MyKeyboard.GetSinglePress("F") && CanOpen)
             {
                 if (IsOpened) { Globals.SoundManager.PlaySound("Close"); } 
                 else { Globals.SoundManager.PlaySound("Open"); }
                 IsOpened = !IsOpened;
-            }
-            var posOnGrid = Grid.GetSlotFromPixel(Position);
-            if (IsOpened)
-            {
-                Grid.slots[(int)posOnGrid.X][(int)posOnGrid.Y].SetToFilled(false);
-                Grid.slots[(int)posOnGrid.X - 1][(int)posOnGrid.Y].SetToFilled(false);
-            }
-            else
-            {
-                Grid.slots[(int)posOnGrid.X][(int)posOnGrid.Y].SetToFilled(true);
-                Grid.slots[(int)posOnGrid.X - 1][(int)posOnGrid.Y].SetToFilled(true);
+                grid.slots[(int)posOnGrid.X][(int)posOnGrid.Y + 1].SwitchGridImassability(!IsOpened);
+                grid.slots[(int)posOnGrid.X - 1][(int)posOnGrid.Y + 1].SwitchGridImassability(!IsOpened);
+                grid.slots[(int)posOnGrid.X][(int)posOnGrid.Y].SwitchGridImassability(!IsOpened);
+                grid.slots[(int)posOnGrid.X - 1][(int)posOnGrid.Y].SwitchGridImassability(!IsOpened);
             }
         }
 

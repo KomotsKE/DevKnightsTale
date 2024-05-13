@@ -1,6 +1,4 @@
-﻿using KnightsTale.Sprites;
-
-namespace KnightsTale.Scenes
+﻿namespace KnightsTale.Scenes
 {
     internal class MainMenu : IScene
     {

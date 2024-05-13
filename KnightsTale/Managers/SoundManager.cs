@@ -1,12 +1,10 @@
-﻿using KnightsTale.Models;
-
-namespace KnightsTale.Managers
+﻿namespace KnightsTale.Managers
 {
     public class SoundManager
     {
         public SoundItem BackgroundMusic;
 
-        public List<SoundItem> Sounds = new List<SoundItem>();
+        public List<SoundItem> Sounds = new();
 
         public SoundManager(SoundEffect sound)
         {
@@ -24,8 +22,7 @@ namespace KnightsTale.Managers
 
         public virtual void ChangeBackGroundMusic(SoundEffect sound)
         {
-            if (BackgroundMusic != null)
-                BackgroundMusic.SoundInstance.Stop();
+            BackgroundMusic?.SoundInstance.Stop();
 
             BackgroundMusic = new SoundItem("BackgroundMusic", 0.25f, sound);
             BackgroundMusic.CreateInstance();

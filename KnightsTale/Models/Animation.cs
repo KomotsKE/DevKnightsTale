@@ -2,7 +2,7 @@
 {
     public class Animation
     {
-        Texture2D texture;
+        readonly Texture2D texture;
         public Texture2D Texture
         {
             get { return texture; }
@@ -14,7 +14,7 @@
             get { return texture.Height; }
         }
 
-        float frameTime;
+        readonly float frameTime;
         public float FrameTime
         {
             get { return frameTime; }
@@ -22,14 +22,27 @@
 
         public int FrameCount;
 
-        bool isLooping;
+        readonly bool isLooping;
         public bool IsLooping
         {
             get { return isLooping; }
         }
 
+        public Vector2 Origin;
+
         public Animation(Texture2D newTexture, int newFrameWidth, float newFrameTime, bool newIsLooping)
         {
+            texture = newTexture;
+            FrameWidth = newFrameWidth;
+            frameTime = newFrameTime;
+            isLooping = newIsLooping;
+            FrameCount = texture.Width / FrameWidth;
+            Origin = new Vector2(FrameWidth / 2, FrameHeight);
+        }
+
+        public Animation(Texture2D newTexture, int newFrameWidth, float newFrameTime, bool newIsLooping, Vector2 origin)
+        {
+            Origin = origin;
             texture = newTexture;
             FrameWidth = newFrameWidth;
             frameTime = newFrameTime;

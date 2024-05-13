@@ -1,7 +1,4 @@
-﻿using KnightsTale.Sprites;
-using KnightsTale.Sprites.UserInterface;
-
-namespace KnightsTale.Models
+﻿namespace KnightsTale.Models
 {
     public class DeathMenu : Menu
     {
@@ -24,7 +21,5 @@ namespace KnightsTale.Models
             base.Draw();
         }
         public void Restart(object info) => RestartFlag = true;
-
-        public void Exit(object info) => Environment.Exit(0);
     }
 }

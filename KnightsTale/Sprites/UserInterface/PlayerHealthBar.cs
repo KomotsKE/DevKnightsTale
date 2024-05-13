@@ -1,21 +1,20 @@
-﻿using KnightsTale.Sprites.Units;
-
-namespace KnightsTale.Sprites.UserInterface
+﻿namespace KnightsTale.Sprites.UserInterface
 {
     public class PlayerHealthBar : Sprite
     {
-        Texture2D HalfHeart;
-        Texture2D EmptyHeart;
+        private readonly Texture2D HalfHeart;
+        private readonly Texture2D EmptyHeart;
 
-        float HeartsCount { get { return HealthMax / 2; } }
+        private float HeartsCount { get { return HealthMax / 2; } }
 
-        float Health, HealthMax;
+        private float Health;
+        private readonly float HealthMax;
+
         public PlayerHealthBar(Texture2D fullHeart, Texture2D halfHeart, Texture2D emptyHeart, float healthMax, Vector2 position) : base(fullHeart, position)
         {
             HalfHeart = halfHeart;
             EmptyHeart = emptyHeart;
             HealthMax = healthMax;
-            Vector2[] vectorArray = new Vector2[(int)HeartsCount];
         }
 
         public void Update(Player player)

@@ -23,11 +23,6 @@
             CollisionHitBox = rectangle;
         }
 
-        public void Update(int x, int y)
-        {
-
-        }
-
         public void Draw()
         {
             Globals.SpriteBatch.DrawRectangle(CollisionHitBox, Color);

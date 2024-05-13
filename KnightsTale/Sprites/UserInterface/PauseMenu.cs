@@ -25,9 +25,9 @@
             base.Draw();
         }
 
-        public void Play(object info) => GameGlobals.IsPaused = false;
+        public static void Play(object info) => GameGlobals.IsPaused = false;
         public void Restart(object info) => RestartFlag = true;
 
-        public void Exit(object info) => Environment.Exit(0);
+        public static void Exit(object info) => Environment.Exit(0);
     }
 }

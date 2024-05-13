@@ -1,11 +1,8 @@
-﻿using KnightsTale.Managers;
-using KnightsTale.Scenes;
-
-namespace KnightsTale
+﻿namespace KnightsTale
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SceneManager sceneManager;
 
@@ -47,16 +44,17 @@ namespace KnightsTale
             Globals.SoundManager = new SoundManager(null);
 
             Globals.SceneManager.AddScene(new GameScene());
+            Globals.SceneManager.AddScene(new CutsceneFirst());
             Globals.SceneManager.AddScene(new MainMenu(NextScene, ExitGame));
 
-            Globals.SpriteBatch.LoadPixel(Globals.Graphics.GraphicsDevice);
+            Globals.SpriteBatch.LoadPixel();
             LoadSounds();
         }
 
         protected override void Update(GameTime gameTime)
         {
 
-            Globals.gameTime = gameTime;
+            Globals.GameTime = gameTime;
             Globals.Mouse.Update();
             Globals.MyKeyboard.Update();
 
@@ -80,7 +78,7 @@ namespace KnightsTale
             Exit();
         }
 
-        public void NextScene(object Info)
+        public static void NextScene(object Info)
         {
             if (Globals.SceneManager.sceneStack.Count > 1)
             {
@@ -88,7 +86,7 @@ namespace KnightsTale
             }
         }
 
-        public void LoadSounds()
+        public static void LoadSounds()
         {
             Globals.SoundManager.AddSound("Shoot", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Crossbow_shoot2"));
             Globals.SoundManager.AddSound("Loading", 0.25f, Globals.Content.Load<SoundEffect>("Audio/Sounds/Crossbow_loading_middle1"));

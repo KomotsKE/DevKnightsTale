@@ -67,6 +67,18 @@
 /processorParam:Quality=Best
 /build:Audio/Sounds/Wood Block3.wav
 
+#begin Backgrounds/felix_by_asstika_ddevu5v-pre.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Backgrounds/felix_by_asstika_ddevu5v-pre.jpg
+
 #begin Backgrounds/MenuBackGround2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -437,6 +449,18 @@
 /processorParam:TextureFormat=Color
 /build:Map/SpriteSheets/Grid.png
 
+#begin Map/SpriteSheets/key.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Map/SpriteSheets/key.png
+
 #begin Map/SpriteSheets/omnibo_dessert_dungeon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -683,6 +707,30 @@
 /processorParam:TextureFormat=Color
 /build:Projectiles/Crossbow_bolt.png
 
+#begin Projectiles/FB001.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Projectiles/FB001.png
+
+#begin Projectiles/Firebal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Projectiles/Firebal.png
+
 #begin Projectiles/weapon_arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -779,6 +827,18 @@
 /processorParam:TextureFormat=Color
 /build:Weapon/Loaded_Crossbow_2.png
 
+#begin Weapon/small_sting.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapon/small_sting.png
+
 #begin Weapon/weapon_bow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -802,4 +862,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Weapon/weapon_knight_sword.png
+
+#begin Weapon/weapon_red_magic_staff.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Weapon/weapon_red_magic_staff.png
 

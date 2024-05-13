@@ -1,8 +1,4 @@
-﻿using KnightsTale.Models;
-using KnightsTale.Objects;
-using KnightsTale.Sprites.Units;
-
-namespace KnightsTale.Sprites.Projectiles
+﻿namespace KnightsTale.Sprites.Projectiles
 {
     public class Projectile : Sprite
     {
@@ -11,19 +7,18 @@ namespace KnightsTale.Sprites.Projectiles
         public bool Done;
         public Unit Owner;
         public Timer TimerToDone;
+        public float pushDistance;
+        public int Recoil;
         public Projectile(Texture2D texture, Vector2 position, Unit owner, Vector2 target) : base(texture, position)
         {
             Done = false;
-            Speed = 5f;
             this.Owner = owner;
             Position = owner.Position + new Vector2(0, -5);
             Direction = target - Owner.Position;
             Direction.Normalize();
-            if (owner.DontStuck(-Direction * 1))
-                owner.Position -= Direction * 1;
-            
 
-            Rotation = owner.weapon.Rotation;
+
+            Rotation = Globals.RotateTowards(Position, target);
 
             TimerToDone = new Timer(800);
         }
@@ -44,14 +39,14 @@ namespace KnightsTale.Sprites.Projectiles
             }
             foreach (var rect in collisionGroup)
             {
-                if (rect.Intersects(new Rectangle((int)Position.X, (int)Position.Y, 3, 3)))
+                if (rect.Intersects(new Rectangle((int)Position.X, (int)Position.Y, 1, 1)))
                 {
                     Done = true;
                 }
             }
             foreach (var door in doorGroup)
             {
-                if (door.DoorHitBox.CollisionHitBox.Intersects(new Rectangle((int)Position.X,(int)Position.Y,3,3)))
+                if (door.DoorHitBox.CollisionHitBox.Intersects(new Rectangle((int)Position.X, (int)Position.Y, 1, 1)))
                 {
                     Done = true;
                 }
@@ -63,7 +58,7 @@ namespace KnightsTale.Sprites.Projectiles
             foreach (var unit in UnitList)
             {
                 float distance = Vector2.Distance(Position, unit.Position);
-                if (distance < unit.HitDist)
+                if (Owner.Type != unit.Type && distance < unit.HitDist && !unit.Dead)
                 {
                     unit.GetHit(1);
                     float pushDistance = 5;

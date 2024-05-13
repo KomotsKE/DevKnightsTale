@@ -1,8 +1,4 @@
-﻿
-using KnightsTale.Sprites.Units;
-using KnightsTale.Sprites.UserInterface;
-
-namespace KnightsTale.Models
+﻿namespace KnightsTale.Sprites.UserInterface
 {
     public class UserInterface
     {
@@ -10,6 +6,9 @@ namespace KnightsTale.Models
         public PlayerHealthBar PlayerHealthBar;
         public PauseMenu PauseMenu;
         public DeathMenu DeathMenu;
+        public DialogBox DialogBox;
+        public string tempStr;
+        public string tempStr2;
         public UserInterface(Player player)
         {
             Font = Globals.Content.Load<SpriteFont>("Fonts/8-bit");
@@ -22,16 +21,20 @@ namespace KnightsTale.Models
 
         public void Update(Player player)
         {
+            tempStr = "Stamina - " + Math.Round(player.Stamina) + "/100";
+            tempStr2 = "Arrows - " + player.ArrowsCount;
             PlayerHealthBar.Update(player);
             if (GameGlobals.IsPaused) PauseMenu.Update();
             if (GameGlobals.IsOver) DeathMenu.Update();
         }
 
-        public void Draw(Player player)
+        public void Draw()
         {
             if (!GameGlobals.IsOver && !GameGlobals.IsPaused)
             {
                 PlayerHealthBar.Draw();
+                Globals.SpriteBatch.DrawString(Font, tempStr, new Vector2(0,100), Color.White, 0f, Vector2.Zero, 1.5F, SpriteEffects.None, 1);
+                Globals.SpriteBatch.DrawString(Font, tempStr2, new Vector2(0, 150), Color.White, 0f, Vector2.Zero, 1.5F, SpriteEffects.None, 1);
             }
             else if (GameGlobals.IsPaused)
             {

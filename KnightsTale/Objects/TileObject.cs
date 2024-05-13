@@ -22,7 +22,7 @@
             Height = rectangle.Height;
         }
 
-        public virtual void Update()
+        public virtual void Update(Player player)
         {
 
         }

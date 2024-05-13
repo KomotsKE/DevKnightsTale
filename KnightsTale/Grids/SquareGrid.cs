@@ -1,6 +1,4 @@
-﻿using KnightsTale.Sprites;
-
-namespace KnightsTale.Grids
+﻿namespace KnightsTale.Grids
 {
     public class SquareGrid
     {
@@ -42,7 +40,7 @@ namespace KnightsTale.Grids
         {
             Vector2 adjustedPos = pixel - PhysicalStartPos;
 
-            Vector2 tempVec = new Vector2(Math.Min(Math.Max(0, (int)(adjustedPos.X / SlotDims.X)), slots.Count - 1),
+            Vector2 tempVec = new(Math.Min(Math.Max(0, (int)(adjustedPos.X / SlotDims.X)), slots.Count - 1),
                 Math.Min(Math.Max(0, (int)(adjustedPos.Y / SlotDims.Y)), slots[0].Count - 1));
 
             return tempVec;
@@ -69,9 +67,9 @@ namespace KnightsTale.Grids
             return PhysicalStartPos + new Vector2((int)LOC.X * SlotDims.X, (int)LOC.Y * SlotDims.Y);
         }
 
-        public List<Vector2> GetPath(Vector2 START, Vector2 END, bool ALLOWDIAGNALS)
+        public List<Vector2> GetPath(Vector2 START, Vector2 END)
         {
-            List<GridLocation> viewable = new List<GridLocation>(), used = new List<GridLocation>();
+            List<GridLocation> viewable = new(), used = new();
 
             List<List<GridLocation>> masterGrid = MasterGridUpdate(END);
 
@@ -79,11 +77,11 @@ namespace KnightsTale.Grids
 
             while (viewable.Count > 0 && !(viewable[0].Position.X == END.X && viewable[0].Position.Y == END.Y))
             {
-                TestAStarNode(masterGrid, viewable, used, END, ALLOWDIAGNALS);
+                TestAStarNode(masterGrid, viewable, used, END);
             }
 
 
-            List<Vector2> path = new List<Vector2>();
+            List<Vector2> path = new();
 
             if (viewable.Count > 0)
             {
@@ -95,17 +93,12 @@ namespace KnightsTale.Grids
                     tempPos = GetPosFromLoc(currentNode.Position) + SlotDims / 2;
                     path.Add(new Vector2(tempPos.X, tempPos.Y));
 
-                    if (currentNode.Position == START)
-                    {
-                        break;
-                    }
+                    if (currentNode.Position == START) break;
+
                     currentNode = masterGrid[(int)currentNode.Parent.X][(int)currentNode.Parent.Y];
                 }
                 path.Reverse();
-                if (path.Count > 1)
-                {
-                    path.RemoveAt(0);
-                }
+                if (path.Count > 1) path.RemoveAt(0);
             }
             return path;
         }
@@ -133,7 +126,7 @@ namespace KnightsTale.Grids
             return masterGrid;
         }
 
-        public void TestAStarNode(List<List<GridLocation>> masterGrid, List<GridLocation> viewable, List<GridLocation> used, Vector2 end, bool ALLOWDIAGNALS)
+        public void TestAStarNode(List<List<GridLocation>> masterGrid, List<GridLocation> viewable, List<GridLocation> used, Vector2 end)
         {
             GridLocation currentNode;
 
@@ -146,11 +139,11 @@ namespace KnightsTale.Grids
                 int newX = (int)viewable[0].Position.X + dx[i];
                 int newY = (int)viewable[0].Position.Y + dy[i];
 
-                if (newX >= 0 && newX < masterGrid.Count && newY >= 0 && newY < masterGrid[0].Count &&
-                    !masterGrid[newX][newY].Impassable && !used.Any(g => g.Position.X == newX && g.Position.Y == newY))
+                if ((newX == (int)end.X && newY == (int)end.Y) || (newX >= 0 && newX < masterGrid.Count && newY >= 0 && newY < masterGrid[0].Count &&
+                    !masterGrid[newX][newY].Impassable && !used.Any(g => g.Position.X == newX && g.Position.Y == newY)))
                 {
                     currentNode = masterGrid[newX][newY];
-                    SetAStarNode(viewable, used, currentNode, new Vector2(viewable[0].Position.X, viewable[0].Position.Y), viewable[0].CurrentDistance, end, cost[i]);
+                    SetAStarNode(viewable, currentNode, new Vector2(viewable[0].Position.X, viewable[0].Position.Y), viewable[0].CurrentDistance, cost[i]);
                 }
             }
 
@@ -159,27 +152,18 @@ namespace KnightsTale.Grids
             viewable.RemoveAt(0);
         }
 
-        public void SetAStarNode(List<GridLocation> viewable, List<GridLocation> used, GridLocation nextNode, Vector2 nextParent, float d, Vector2 target, float DISTMULT)
+        public void SetAStarNode(List<GridLocation> viewable, GridLocation nextNode, Vector2 nextParent, float d, float DISTMULT)
         {
             float f = d;
             float addedDist = (nextNode.Cost * DISTMULT);
-
 
             if (!nextNode.IsViewable && !nextNode.HasBeenUsed)
             {
                 nextNode.SetNode(nextParent, f, d + addedDist);
                 nextNode.IsViewable = true;
-
                 SetAStarNodeInsert(viewable, nextNode);
             }
-            else if (nextNode.IsViewable)
-            {
-
-                if (f < nextNode.FScore)
-                {
-                    nextNode.SetNode(nextParent, f, d + addedDist);
-                }
-            }
+            else if (nextNode.IsViewable && f < nextNode.FScore) nextNode.SetNode(nextParent, f, d + addedDist);
         }
 
         public virtual void SetAStarNodeInsert(List<GridLocation> LIST, GridLocation NEWNODE)
@@ -190,11 +174,9 @@ namespace KnightsTale.Grids
                 if (LIST[i].FScore > NEWNODE.FScore)
                 {
                     LIST.Insert(Math.Max(1, i), NEWNODE);
-                    added = true;
-                    break;
+                    added = true; break;
                 }
             }
-
             if (!added)
             {
                 LIST.Add(NEWNODE);
@@ -215,6 +197,7 @@ namespace KnightsTale.Grids
                     {
                         if (CurrentHoverSlot.X == j && CurrentHoverSlot.Y == k) color = Color.Red;
                         else if (slots[j][k].Filled) color = Color.DarkGray;
+                        else if (slots[j][k].Impassable) color = Color.Black;
                         else color = Color.White;
 
                         GridImg.Draw(PhysicalStartPos + new Vector2(j * SlotDims.X, k * SlotDims.Y) - new Vector2(SlotDims.X / 2 - 1, SlotDims.Y / 2 - 1), color);

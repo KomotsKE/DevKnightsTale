@@ -1,11 +1,4 @@
-﻿using KnightsTale.Grids;
-using KnightsTale.Managers;
-using KnightsTale.Models;
-using KnightsTale.Objects;
-using KnightsTale.Sprites;
-using KnightsTale.Sprites.Projectiles;
-using KnightsTale.Sprites.Units;
-using KnightsTale.Sprites.Units.Monsters;
+﻿using SharpDX.Direct2D1;
 using TiledCS;
 
 namespace KnightsTale.Scenes
@@ -19,11 +12,14 @@ namespace KnightsTale.Scenes
         private Dictionary<int, TiledTileset> tilesets;
         private List<Rectangle> CollisionGroup;
         private List<Door> DoorGroup;
+        private List<Tablet> Tablets;
         private Camera camera;
-        private List<Projectile> HeroProjectiles;
-        private List<Monster> Monsters;
+        private readonly List<Projectile> Projectiles;
+        private readonly List<Monster> Monsters;
+        private readonly List<Unit> Units;
         private UserInterface UI;
-        private SquareGrid Grid;
+        private readonly SquareGrid Grid;
+        private List<Key> Keys;
 
 
         public GameScene()
@@ -35,8 +31,11 @@ namespace KnightsTale.Scenes
             Sprites = new();
             CollisionGroup = new();
             DoorGroup = new();
-            HeroProjectiles = new();
+            Projectiles = new();
             Monsters = new();
+            Units = new();
+            Tablets = new();
+            Keys = new();
             Grid = new SquareGrid(new Vector2(16, 16), new Vector2(-96, -96), new Vector2(Globals.ScreenWidth + 192, Globals.ScreenHeight + 192));
             Globals.SoundManager.ChangeBackGroundMusic(Globals.Content.Load<SoundEffect>("Audio/Music/field_theme_2"));
         }
@@ -49,33 +48,34 @@ namespace KnightsTale.Scenes
             camera = new Camera(Globals.Graphics.GraphicsDevice.Viewport);
             Globals.GameCamera = camera;
             DoorGroup = mapManager.GetDoorObjects();
+            Tablets = mapManager.GetTabletObjects();
+            Keys = mapManager.GetKeyObjects();
             Sprites = mapManager.GetTileListByGroups();
             CollisionGroup = mapManager.GetCollisionsListByGroups();
-            player = new Player(Globals.Content.Load<Texture2D>("Player/knight_m_idle_anim_f0"), mapManager.GetPlayerSpawnPoint(), CollisionGroup, DoorGroup);
+            player = new Player(Globals.Content.Load<Texture2D>("Player/knight_m_idle_anim_f0"), mapManager.GetPlayerSpawnPoint(), CollisionGroup, DoorGroup, "Player");
             UI = new(player);
             foreach (var spawnPoint in mapManager.GetMonsterSpawnPoint())
                 CreateMonster(Globals.Random.Next(7), spawnPoint);
+            Units.Add(player);
         }
 
         public virtual void Update()
         {
-            if (player.Dead) GameGlobals.IsOver = true;
             if (!GameGlobals.IsOver && !GameGlobals.IsPaused)
             {
                 Mouse.SetCursor(Globals.CombatCursor);
                 player.Update();
                 camera.Update(player.Position, map);
-                foreach (var door in DoorGroup)
+                foreach (var door in DoorGroup) door.Update(player, Grid);
+                foreach (var tablet in Tablets) tablet.Update(player);
+                foreach (var key in Keys) key.Update(player);
+                for (var i = 0; i < Projectiles.Count; i++)
                 {
-                    door.Update(player.Position);
-                }
-                for (var i = 0; i < HeroProjectiles.Count; i++)
-                {
-                    HeroProjectiles[i].Update(Monsters.ToList<Unit>(), CollisionGroup, DoorGroup);
+                    Projectiles[i].Update(Units, CollisionGroup, DoorGroup);
 
-                    if (HeroProjectiles[i].Done)
+                    if (Projectiles[i].Done)
                     {
-                        HeroProjectiles.RemoveAt(i);
+                        Projectiles.RemoveAt(i);
                         i--;
                     }
                 }
@@ -120,31 +120,33 @@ namespace KnightsTale.Scenes
             Globals.SpriteBatch.Begin(SpriteSortMode.FrontToBack,
                 BlendState.AlphaBlend, samplerState: SamplerState.PointClamp, null, null, null, camera.Transform);
             player.Draw();
-            foreach (var tile in Sprites.Where(x => x.Item1.name == "Columns" || x.Item1.name == "WallBase" || x.Item1.name == "WallCorners"))
+            foreach (var tile in Sprites.Where(x => x.Item1.name == "Columns" || x.Item1.name == "WallBase" || x.Item1.name == "WallCorners" || x.Item1.name == "AllwaysFront"))
             {
                 tile.Item2.Draw();
             }
             foreach (var door in DoorGroup) { door.Draw(); }
             foreach (var monster in Monsters) { monster.Draw(); }
-            foreach (var projectile in HeroProjectiles) { projectile.Draw(); }
+            foreach (var projectile in Projectiles) { projectile.Draw(); }
+            foreach (var key in Keys) { key.Draw(); }
             Globals.SpriteBatch.End();
             Globals.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            UI.Draw(player);
+            UI.Draw();
+            foreach (var tablet in Tablets) { tablet.Draw(); }
             Globals.SpriteBatch.End();
         }
 
-        public void AddProjectile(object objInfo) => HeroProjectiles.Add((Projectile)objInfo);
-        public void AddMonster(object objInfo) => Monsters.Add((Monster)objInfo);
+        public void AddProjectile(object objInfo) => Projectiles.Add((Projectile)objInfo);
+        public void AddMonster(object objInfo) { Monsters.Add((Monster)objInfo); Units.Add((Monster)objInfo); }
 
         public void CreateMonster(int number, Vector2 spawnPoint)
         {
-            if (number == 0) GameGlobals.PassMonster(new Skelet(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
-            if (number == 1) GameGlobals.PassMonster(new Wogol(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
-            if (number == 2) GameGlobals.PassMonster(new Chort(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
-            if (number == 3) GameGlobals.PassMonster(new Imp(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
-            if (number == 4) GameGlobals.PassMonster(new Muddy(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
-            if (number == 5) GameGlobals.PassMonster(new Shaman(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
-            if (number == 6) GameGlobals.PassMonster(new Necromancer(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup));
+            if (number == 0) GameGlobals.PassMonster(new Skelet(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
+            if (number == 1) GameGlobals.PassMonster(new Wogol(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
+            if (number == 2) GameGlobals.PassMonster(new Chort(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
+            if (number == 3) GameGlobals.PassMonster(new Imp(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
+            if (number == 4) GameGlobals.PassMonster(new Muddy(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
+            if (number == 5) GameGlobals.PassMonster(new Shaman(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
+            if (number == 6) GameGlobals.PassMonster(new Necromancer(Globals.Content.Load<Texture2D>("Monsters/BaseMonster"), spawnPoint, CollisionGroup, DoorGroup, "Monster"));
         }
     }
 }

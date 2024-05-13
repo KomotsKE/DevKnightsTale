@@ -3,10 +3,12 @@
     public static class SpriteBatchExtensions
     {
         private static Texture2D _pixel;
+        private static SpriteBatch _spriteBatch;
 
-        public static void LoadPixel(this SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public static void LoadPixel(this SpriteBatch spriteBatch)
         {
-            _pixel = new Texture2D(graphicsDevice, 1, 1);
+            _spriteBatch = spriteBatch;
+            _pixel = new Texture2D(_spriteBatch.GraphicsDevice, 1, 1);
             _pixel.SetData(new Color[] { Color.White });
         }
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color, float depth = 1, int thickness = 1)

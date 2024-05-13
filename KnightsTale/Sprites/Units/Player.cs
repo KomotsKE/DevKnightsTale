@@ -1,34 +1,39 @@
-﻿using KnightsTale.Managers;
-using KnightsTale.Models;
-using KnightsTale.Objects;
-using KnightsTale.Sprites.Weapons;
-
-namespace KnightsTale.Sprites.Units
+﻿namespace KnightsTale.Sprites.Units
 {
     public class Player : Unit
     {
         private HitBox HitBox { get { return new HitBox((int)Position.X - 5, (int)Position.Y - 4, 10, 4, Color.Red); ; } }
         private Vector2 Movement { get; set; }
-        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, List<Door> doorGroup) : base(texture, position, collisionGroup, doorGroup)
+        private readonly Crossbow weapon;
+        private bool CanPressShift;
+        public float Stamina, StaminaMax;
+        public int ArrowsCount;
+        public List<string> Keys;
+        public Player(Texture2D texture, Vector2 position, List<Rectangle> collisionGroup, List<Door> doorGroup, string type) : base(texture, position, collisionGroup, doorGroup,type)
         {
-            weapon = new Crossbow(Globals.Content.Load<Texture2D>("Weapon/Crossbow_2"), Globals.Content.Load<Texture2D>("Weapon/Loaded_Crossbow_2"), this.Position);
+            Keys = new();
+            CanPressShift = true;
+            weapon = new Crossbow(Globals.Content.Load<Texture2D>("Weapon/Crossbow_2"), Globals.Content.Load<Texture2D>("Weapon/Loaded_Crossbow_2"), Position);
             Speed = 1f;
-            Health = 10;
+            Health = 20;
             HealthMax = Health;
+            Stamina = 100;
+            StaminaMax = Stamina;
+            ArrowsCount = 20;
             WalkAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_walk_anim"), 16, 0.1f, true);
             IdleAnimation = new Animation(Globals.Content.Load<Texture2D>("Player/knight_m_idle_anim"), 16, 0.1f, true);
         }
 
         public override void Update()
         {
+            if (Health > HealthMax) { Health = HealthMax;}
+            if (Dead) GameGlobals.IsOver = true;
             Depth = (Position.Y) * Globals.DeepCoef;
             weapon.Update(this);
             MovementLogic();
-            if (Globals.MyKeyboard.GetPress("LeftShift"))
-            {
-                Speed = 1.3f;
-            }
-            else Speed = 1f;
+            RunLogic();
+
+            
             base.Update();
         }
 
@@ -36,6 +41,31 @@ namespace KnightsTale.Sprites.Units
         {
             base.Draw();
             weapon.Draw();
+        }
+
+        public void RunLogic()
+        {
+            if (Globals.MyKeyboard.GetPress("LeftShift") && Stamina > 0 && CanPressShift)
+            {
+                Speed = 1.3f;
+                Stamina -= 0.7f;
+            }
+            else if (Stamina > 0 && Stamina < 30)
+            {
+                Stamina += 0.25f;
+                Speed = 0.5f;
+                CanPressShift = false;
+            }
+            else if (Stamina < StaminaMax && !Globals.MyKeyboard.GetPress("LeftShift"))
+            {
+                Stamina += 0.25f;
+                Speed = 0.8f;
+            }
+            else
+            {
+                Speed = 1f;
+                CanPressShift = true;
+            }
         }
 
         private void PlayAnimation()

@@ -4,7 +4,7 @@
     {
         public bool goodToGo;
         protected int mSec;
-        protected TimeSpan timer = new TimeSpan();
+        protected TimeSpan timer = new();
 
 
         public Timer(int mS)
@@ -30,12 +30,12 @@
 
         public void UpdateTimer()
         {
-            timer += Globals.gameTime.ElapsedGameTime;
+            timer += Globals.GameTime.ElapsedGameTime;
         }
 
         public void UpdateTimerSpeed(float Speed)
         {
-            timer += TimeSpan.FromTicks((long)(Globals.gameTime.ElapsedGameTime.Ticks * Speed));
+            timer += TimeSpan.FromTicks((long)(Globals.GameTime.ElapsedGameTime.Ticks * Speed));
         }
 
         public virtual void AddTimeToTimer(int MSEC)
